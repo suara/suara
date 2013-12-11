@@ -20,14 +20,18 @@ if (!defined("SUARA_CORE_PATH")) {
 	define('SUARA_CORE_PATH', S_PATH."libs".DIRECTORY_SEPARATOR);
 }
 
+if (!defined("SUARA_APPS_PATH")) {
+	define('SUARA_APPS_PATH', S_PATH."applications".DIRECTORY_SEPARATOR);
+}
+
 //suara 应用或者模块目录
 if (!defined("SUARA_MODULES_PATH")) {
-	define('SUARA_MODULES_PATH', S_PATH."modules".DIRECTORY_SEPARATOR);
+	define('SUARA_MODULES_PATH', SUARA_APPS_PATH."modules".DIRECTORY_SEPARATOR);
 }
 
 //suara 模板层
 if (!defined("SUARA_TEMPLATE_PATH")) {
-	define('SUARA_TEMPLATE_PATH', S_PATH."templates".DIRECTORY_SEPARATOR);
+	define('SUARA_TEMPLATE_PATH', SUARA_APPS_PATH."templates".DIRECTORY_SEPARATOR);
 }
 
 //最外层的根目录
