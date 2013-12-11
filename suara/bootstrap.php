@@ -6,9 +6,6 @@
  */
 
 namespace Suara;
-
-ini_set("display_errors", "1");
-error_reporting(E_ALL ^ E_NOTICE);
 define("IN_SUARA", true);
 date_default_timezone_set("Asia/Shanghai");
 
@@ -63,7 +60,6 @@ spl_autoload_register(array("Kernel", "load"));
 
 use Suara\libs\Error\ErrorHandler;
 use Suara\libs\Core\Configure;
-
 
 //define('ASSET_COMPILE_OUTPUT_DIR', CACHE_PATH.'asset_cache');
 //define('ASSET_COMPILE_URL_ROOT', '/caches/asset_cache');

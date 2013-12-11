@@ -7,6 +7,7 @@ $config = array(
     'auth_key' => 'ufns92391bnoyu981',
     'valid_key' => '',
     'charset' => 'utf-8',
+	'debug' => 1,
     'gzip' => 1
 );
 

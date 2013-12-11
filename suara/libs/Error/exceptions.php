@@ -74,6 +74,10 @@ class PrivateActionException extends SuaraException {
 
 }
 
+class ConfigureException extends SuaraException {
+
+}
+
 class SuaraLogException extends SuaraException {
 
 }

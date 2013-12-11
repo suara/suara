@@ -4,62 +4,88 @@ use Suara\libs\Configure\ConfigureReaderInterface;
 defined('IN_SUARA') or exit('Permission deiened');
 
 class Configure {
-	protected static $_values = array(
-	
-	);
+	protected static $_values = array();
 
 	protected static $_readers = array();
 
-	public static function bootstrap($boot = true) {
+	/**
+	 * @key filename
+	 */
+	public static function write($key, $config, $value = null) {
+		if (!is_array($config)) {
+			$config = array($config = $value);
+		}
 
-	}
+		//save
+		self::$_values[$key] = $config;
 
-	public static function write($config, $value = null) {
+		if (isset($config['debug']) && function_exists('ini_set')) {
+			if (self::$_values[$key]['debug']) {
+				ini_set('display_errors', 1);
+			} else {
+				ini_set('display_errors', 0);
+			}
+		}
+		
 
+		return true;
 	}
 
 	/**
 	 * 从Configure中读取配置信息
 	 *
-	 * {{{
-	 * Configure::read("Name") 返回所有Name的值
-	 * Configure::read("Name.key") 返回Name数组中key的值， 相当于Name[key]
-	 * }}}
-	 *
 	 * @return mixed
 	 */
-	public static function read($var = null) {
-		if ($var === null ) {
-			return self::$_values;
+	public static function read($file, $key = '', $default = '') {
+		if (!isset($_values[$file])) {
+			self::load($file);
+		}
+
+		if (empty($key))  {
+			return self::$_values[$file];
+		}elseif (isset($_values[$file][$key])) {
+			return self::$_values[$file][$key];
+		} else {
+			return $default;
 		}
 	}
 
-	public static function check($var = null) {
-	}
+	//public static function check($var = null) {
+	//}
 
-	public static function delete($var = null) {
+	//public static function delete($var = null) {
+	//}
 
-	}
-
+	/**
+	 * 将Reader保存在pool中，避免重复创建，造成内存的浪费
+	 */
 	public static function config($name, ConfigureReaderInterface $reader) {
 		self::$_readers[$name] = $reader;
 	}
 
-	public static function configured() {
+	//public static function configured() {
+	//}
 
-	}
-
-	public static function drop() {
-
-	}
+	//public static function drop() {
+	//}
 
 	public static function load($key, $config = 'default', $merge = true) {
 		$reader = self::_getReader($config);
+
+		if(!$reader) {
+			return false;
+		}
+		$values = $reader->read($key);
+
+		//if ($merge) {
+		//	$key = array_keys($values);
+		//}
+
+		return self::write($key, $values);
 	}
 
-	public static function dump() {
-
-	}
+	//public static function dump() {
+	//}
 
 	private static function _getReader($config) {
 		if (!isset(self::$_readers[$config])) {
@@ -67,7 +93,7 @@ class Configure {
 				return false;
 			}
 
-			self::config($config, new Suara\libs\Configure\PhpReader());
+			self::config($config, new \Suara\libs\Configure\PhpReader);
 		}
 
 		return self::$_readers[$config];

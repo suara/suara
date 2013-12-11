@@ -71,30 +71,5 @@ class Kernel {
 	protected static function _loadVendor() {
 
 	}
-
-	///**
-	// * 加载读取配置文件
-	// * @param string $file 需要加载的配置文件名
-	// * @param string $key 需要获取的配置key
-	// * @param string $default 如无法获取到, 即自动返回此默认值
-	// * @param boolean $reload 强制重载配置
-	// */
-	//public static function load_config($file, $key='', $default='', $reload=false) {
-	//	static $configs = array();
-	//	if ($reload || !isset($configs[$file])) {
-	//		$file_path = CACHE_PATH . "configs" . DIRECTORY_SEPARATOR . $file . ".php";
-	//		if (file_exists($file_path)) {
-	//			$configs[$file] = include $file_path;
-	//		}
-	//	}
-
-	//	if (empty($key))  {
-	//		return $configs[$file];
-	//	}elseif (isset($configs[$file][$key])) {
-	//		return $configs[$file][$key];
-	//	} else {
-	//		return $default;
-	//	}
-	//}
 }
 ?>
