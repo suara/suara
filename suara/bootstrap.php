@@ -60,6 +60,16 @@ spl_autoload_register(array("Kernel", "load"));
 use Suara\libs\Error\ErrorHandler;
 use Suara\libs\Core\Configure;
 
+
+use Suara\libs\System\Types\String;
+
+$s = new String("xxx");
+
+$s = "ddd";
+
+echo $s;
+//echo $s->strpos(-1);
+
 //define('ASSET_COMPILE_OUTPUT_DIR', CACHE_PATH.'asset_cache');
 //define('ASSET_COMPILE_URL_ROOT', '/caches/asset_cache');
 //define('SACY_WRITE_HEADERS', false);
