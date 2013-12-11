@@ -47,7 +47,7 @@ ini_set("session.save_path", CACHE_PATH."sessions");
 define('LOGS_PATH', SUARA_PATH.'logs'.DIRECTORY_SEPARATOR);
 
 //wwwroot
-define('WWWROOT_PATH', SUARA_PATH.'wwwroot'.DIRECTORY_SEPARATOR);
+define('WWWROOT_PATH', SUARA_APPS_PATH.'wwwroot'.DIRECTORY_SEPARATOR);
 
 //verdors
 define('VENDORS_PATH', SUARA_PATH.'vendors'.DIRECTORY_SEPARATOR);
@@ -59,16 +59,6 @@ spl_autoload_register(array("Kernel", "load"));
 
 use Suara\libs\Error\ErrorHandler;
 use Suara\libs\Core\Configure;
-
-use Suara\libs\Log\LogEngineCollection;
-
-$a = new LogEngineCollection();
-$logger = $a->load("xxx", array(
-	'engine' => 'FileLog',
-	'enabled' => true
-));
-
-$logger->write("debug", "test");
 
 //define('ASSET_COMPILE_OUTPUT_DIR', CACHE_PATH.'asset_cache');
 //define('ASSET_COMPILE_URL_ROOT', '/caches/asset_cache');

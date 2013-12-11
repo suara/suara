@@ -13,11 +13,11 @@ class LogEngineCollection {
 			throw new SuaraLogException("logger class $loggerName does not implements a write() method.");
 		}
 
-		//$this->_loaded[$name] = $logger;
+		$this->_loaded[$name] = $logger;
 
-		//if ($enable) {
-		//	$this->enable($name);
-		//}
+		if ($enable) {
+			$this->enable($name);
+		}
 		return $logger;
 	}
 
