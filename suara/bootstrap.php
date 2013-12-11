@@ -7,7 +7,7 @@
 
 namespace Suara;
 
-ini_set("display_errors", "0");
+ini_set("display_errors", "1");
 error_reporting(E_ALL ^ E_NOTICE);
 define("IN_SUARA", true);
 date_default_timezone_set("Asia/Shanghai");
@@ -53,22 +53,20 @@ require SUARA_CORE_PATH."Core".DIRECTORY_SEPARATOR."Kernel.php";
 spl_autoload_register(array("Kernel", "load"));
 
 use Suara\libs\Error\ErrorHandler;
+use Suara\libs\Core\Configure;
 
-ErrorHandler::log(3);
+new Configure();
 
 //define('ASSET_COMPILE_OUTPUT_DIR', CACHE_PATH.'asset_cache');
 //define('ASSET_COMPILE_URL_ROOT', '/caches/asset_cache');
 //define('SACY_WRITE_HEADERS', false);
-//
-//// load common func and class
+//load common func and class
 //s_core::load_sys_func("globals");
 //s_core::auto_load_func();
 //register_template_data("site_config", s_core::load_config("system"));
-//
 //if(s_core::load_config('system','gzip') && function_exists('ob_gzhandler') && !ini_get('zlib.output_compression')) {
 //	ob_start('ob_gzhandler');
 //} else {
 //	ob_start();
 //}
-
 ?>

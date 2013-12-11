@@ -1,4 +1,5 @@
 <?php
+defined('IN_SUARA') or exit('Permission deiened');
 /**
  * Suara Kernel
  * management load class, module, model..
@@ -52,12 +53,24 @@ class Kernel {
 		return false;
 	}
 
-	///**
-	// * Create an app and run
-	// */
-	//public static function Run() {
-	//	return self::load_sys_class('Router');
-	//}
+	/**
+	 * like last Suara 
+	 */
+	public static function import() {
+
+	}
+
+	protected static function _loadClass() {
+
+	}
+
+	protected static function _loadFile() {
+
+	}
+
+	protected static function _loadVendor() {
+
+	}
 
 	///**
 	// * 加载读取配置文件
