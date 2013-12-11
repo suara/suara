@@ -73,4 +73,8 @@ class MissingActionException extends SuaraException {
 class PrivateActionException extends SuaraException {
 
 }
+
+class SuaraLogException extends SuaraException {
+
+}
 ?>

@@ -18,22 +18,22 @@ class Kernel {
 		}
 
 		list(, $type, $parts)= explode("\\", $className, 3);
-		
+
 		if (!in_array($type, self::$classTypes)) {
 			return false;
 		}
 
 		$path = "";
 		switch ($type) {
-			case "libs":
-				$path = SUARA_CORE_PATH;
-				break;
-			case "modules":
-				$path = SUARA_MODULES_PATH;
-				break;
-			case "models":
-				$path = S_PATH."models".DIRECTORY_SEPARATOR;
-				break;
+		case "libs":
+			$path = SUARA_CORE_PATH;
+			break;
+		case "modules":
+			$path = SUARA_MODULES_PATH;
+			break;
+		case "models":
+			$path = S_PATH."models".DIRECTORY_SEPARATOR;
+			break;
 		}
 
 		$normalizedClassName = str_replace('\\', DIRECTORY_SEPARATOR, $parts);

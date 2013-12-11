@@ -56,6 +56,16 @@ spl_autoload_register(array("Kernel", "load"));
 use Suara\libs\Error\ErrorHandler;
 use Suara\libs\Core\Configure;
 
+use Suara\libs\Log\LogEngineCollection;
+
+$a = new LogEngineCollection();
+$logger = $a->load("xxx", array(
+	'engine' => 'FileLog',
+	'enabled' => true
+));
+
+$logger->write("debug", "test");
+
 //define('ASSET_COMPILE_OUTPUT_DIR', CACHE_PATH.'asset_cache');
 //define('ASSET_COMPILE_URL_ROOT', '/caches/asset_cache');
 //define('SACY_WRITE_HEADERS', false);
