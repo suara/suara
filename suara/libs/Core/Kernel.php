@@ -41,12 +41,12 @@ class Kernel {
 
 		$hashKey = md5($file);
 
-		if (!empty(self::$classMap[$key])) {
+		if (!empty(self::$classMap[$hashKey])) {
 			return true;
 		}
-			
+
 		if (file_exists($file)) {
-			self::$classMap[$key] = $file;
+			self::$classMap[$hashKey] = $file;
 			return include $file;
 		}
 

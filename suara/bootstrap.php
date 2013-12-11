@@ -55,7 +55,7 @@ spl_autoload_register(array("Kernel", "load"));
 use Suara\libs\Error\ErrorHandler;
 use Suara\libs\Core\Configure;
 
-new Configure();
+ErrorHandler::log(1);
 
 //define('ASSET_COMPILE_OUTPUT_DIR', CACHE_PATH.'asset_cache');
 //define('ASSET_COMPILE_URL_ROOT', '/caches/asset_cache');
