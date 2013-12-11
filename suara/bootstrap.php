@@ -46,6 +46,9 @@ ini_set("session.save_path", CACHE_PATH."sessions");
 //logs目录 用于存放记录文件
 define('LOGS_PATH', SUARA_PATH.'logs'.DIRECTORY_SEPARATOR);
 
+//config目录
+define('CONFIG_PATH', SUARA_PATH.'config'.DIRECTORY_SEPARATOR);
+
 //wwwroot
 define('WWWROOT_PATH', SUARA_APPS_PATH.'wwwroot'.DIRECTORY_SEPARATOR);
 
@@ -55,20 +58,12 @@ define('VENDORS_PATH', SUARA_PATH.'vendors'.DIRECTORY_SEPARATOR);
 
 require SUARA_CORE_PATH."Core".DIRECTORY_SEPARATOR."Kernel.php";
 require SUARA_CORE_PATH."Error".DIRECTORY_SEPARATOR."exceptions.php";
+
 spl_autoload_register(array("Kernel", "load"));
 
 use Suara\libs\Error\ErrorHandler;
 use Suara\libs\Core\Configure;
 
-
-use Suara\libs\System\Types\String;
-
-$s = new String("xxx");
-
-$s = "ddd";
-
-echo $s;
-//echo $s->strpos(-1);
 
 //define('ASSET_COMPILE_OUTPUT_DIR', CACHE_PATH.'asset_cache');
 //define('ASSET_COMPILE_URL_ROOT', '/caches/asset_cache');
