@@ -50,12 +50,11 @@ define('VENDORS_PATH', SUARA_PATH.'vendors'.DIRECTORY_SEPARATOR);
 
 
 require SUARA_CORE_PATH."Core".DIRECTORY_SEPARATOR."Kernel.php";
+require SUARA_CORE_PATH."Error".DIRECTORY_SEPARATOR."exceptions.php";
 spl_autoload_register(array("Kernel", "load"));
 
 use Suara\libs\Error\ErrorHandler;
 use Suara\libs\Core\Configure;
-
-ErrorHandler::log(1);
 
 //define('ASSET_COMPILE_OUTPUT_DIR', CACHE_PATH.'asset_cache');
 //define('ASSET_COMPILE_URL_ROOT', '/caches/asset_cache');
