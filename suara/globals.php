@@ -724,62 +724,6 @@ function pages($totalCount, $currentPage, $pagesize=20, $urlrule='', $array=arra
 }
 
 /**
- * 返回页面路径
- * @param $urlrule 分页规则
- * @param $currentPage 当前页
- * @param $array 需要传递的数据
- *
- * @return 完成的url
- *
- * DEPRECATED
- */
-function pageurl($urlrule, $currentPage, $array=array()) {
-	$findme = array('{$page}');
-	$replaceme = array($currentPage);
-
-	if (is_array($array)) {
-		foreach ($array as $k => $v) {
-			$findme[] = $k;
-			$replaceme[] = $v;
-		}
-	}
-	$url = str_replace($findme, $replaceme, $urlrule);
-	return $url;
-}
-
-/*
- * DEPRECATED
- */
-function page_url_par($par, $url = '') {
-	if ($url == '') {
-		$url = get_url();
-	}
-	$pos = strpos($url, '?');
-
-	if ($pos === false) {
-		$url .= '?'.$par;
-	} else {
-		$querystring = substr(strstr($url, '?'), 1);
-		parse_str($querystring, $pars);
-		$query_array = array();
-		foreach ($pars as $k => $v) {
-			if ($k != 'page') {
-				$query_array[$k] = $v;
-			}
-		}
-		$querystring = http_build_query($query_array);//.'&'.$par;
-		if (!empty($querystring)) {
-			$querystring .= '&' . $par;
-		} else {
-			$querystring .= $par;
-		}
-		$url = substr($url, 0, $pos) . '?' . $querystring;
-	}
-	return $url;
-}
-
-
-/**
  * 生成上传附件验证
  * @param $args   参数
  * @param $operation   操作类型(加密解密)
