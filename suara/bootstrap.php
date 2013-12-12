@@ -4,7 +4,6 @@
  * @author wolftankk@plu.cn
  * php version > 5.3
  */
-
 namespace Suara;
 define("IN_SUARA", true);
 date_default_timezone_set("Asia/Shanghai");
@@ -52,19 +51,20 @@ define('WWWROOT_PATH', SUARA_APPS_PATH.'wwwroot'.DIRECTORY_SEPARATOR);
 //verdors
 define('VENDORS_PATH', SUARA_PATH.'vendors'.DIRECTORY_SEPARATOR);
 
-
+//载入核心启动文件
 require SUARA_CORE_PATH."Core".DIRECTORY_SEPARATOR."Kernel.php";
+
+//将系统异常加载进来
 require SUARA_CORE_PATH."Error".DIRECTORY_SEPARATOR."exceptions.php";
 
 spl_autoload_register(array("Kernel", "load"));
 
+//启用错误处理
 use Suara\libs\Error\ErrorHandler;
+//启用配置文件调用
 use Suara\libs\Core\Configure;
 
-//define('ASSET_COMPILE_OUTPUT_DIR', CACHE_PATH.'asset_cache');
-//define('ASSET_COMPILE_URL_ROOT', '/caches/asset_cache');
-//define('SACY_WRITE_HEADERS', false);
-//load common func and class
+
 //register_template_data("site_config", s_core::load_config("system"));
 //if(s_core::load_config('system','gzip') && function_exists('ob_gzhandler') && !ini_get('zlib.output_compression')) {
 //	ob_start('ob_gzhandler');

@@ -81,6 +81,9 @@ class SmartyView extends ViewRendererInterface {
 		if (!self::$_renderer) {
 			self::$_renderer = new self($module, $template, $options);
 		}
+		//define('ASSET_COMPILE_OUTPUT_DIR', CACHE_PATH.'asset_cache');
+		//define('ASSET_COMPILE_URL_ROOT', '/caches/asset_cache');
+		//define('SACY_WRITE_HEADERS', false);
 
 		//$TEMPLATE_CACHE_PATH = CACHE_PATH . "cache_template" . DIRECTORY_SEPARATOR;
 		//$TEMPLATE_PATH = S_PATH. "templates" . DIRECTORY_SEPARATOR;
