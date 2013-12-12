@@ -65,8 +65,6 @@ use Suara\libs\Core\Configure;
 //define('ASSET_COMPILE_URL_ROOT', '/caches/asset_cache');
 //define('SACY_WRITE_HEADERS', false);
 //load common func and class
-//s_core::load_sys_func("globals");
-//s_core::auto_load_func();
 //register_template_data("site_config", s_core::load_config("system"));
 //if(s_core::load_config('system','gzip') && function_exists('ob_gzhandler') && !ini_get('zlib.output_compression')) {
 //	ob_start('ob_gzhandler');

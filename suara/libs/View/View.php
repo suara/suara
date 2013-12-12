@@ -1,7 +1,7 @@
 <?php
 
 //View:
-//jsonView
+//MustcaheView
 //SmartyView
 class View {
     static private $registered_template_data = array();
