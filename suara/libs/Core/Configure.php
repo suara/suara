@@ -1,15 +1,28 @@
 <?php
+/**
+ * @package Core.Configure
+ * @author wolftankk@plu.cn
+ * 配置文件读取器
+ */
 namespace Suara\libs\Core;
 use Suara\libs\Configure\ConfigureReaderInterface;
 defined('IN_SUARA') or exit('Permission deiened');
 
 class Configure {
+	/**
+	 * 将所有的配置数据保存在$_values中
+	 */
 	protected static $_values = array();
 
+	/**
+	 * 将所有的配置文件读取器保存在$_readers中
+	 */
 	protected static $_readers = array();
 
 	/**
-	 * @key filename
+	 * @param string $type 配置类型 默认含有System
+	 * @param string $key 配置Key
+	 * @param mixed $config 所对应的配置参数
 	 */
 	public static function write($key, $config, $value = null) {
 		if (!is_array($config)) {
@@ -65,27 +78,27 @@ class Configure {
 	//public static function configured() {
 	//}
 
-	//public static function drop() {
+	/**
+	 * 载入配置文件
+	 */
+	//public static function load($key, $config = 'default', $merge = true) {
+	//	$reader = self::_getReader($config);
+
+	//	if(!$reader) {
+	//		return false;
+	//	}
+	//	$values = $reader->read($key);
+
+	//	//if ($merge) {
+	//	//	$key = array_keys($values);
+	//	//}
+
+	//	return self::write($key, $values);
 	//}
 
-	public static function load($key, $config = 'default', $merge = true) {
-		$reader = self::_getReader($config);
-
-		if(!$reader) {
-			return false;
-		}
-		$values = $reader->read($key);
-
-		//if ($merge) {
-		//	$key = array_keys($values);
-		//}
-
-		return self::write($key, $values);
-	}
-
-	//public static function dump() {
-	//}
-
+	/**
+	 * 获取配置文件读取器
+	 */
 	private static function _getReader($config) {
 		if (!isset(self::$_readers[$config])) {
 			if ($config !== 'default') {
