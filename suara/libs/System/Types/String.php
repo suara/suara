@@ -1,7 +1,6 @@
 <?php
 namespace Suara\libs\System\Types;
 
-use Suara\libs\System\Types\Type;
 /**
  * 由于php原来是没有oop的，所以string直接使用函数做处理的，
  * 因此在这里将会重新做一个优化，将它oop化，使用起来更加简单。

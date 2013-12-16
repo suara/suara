@@ -50,6 +50,9 @@ class Configure {
 			 */
 			self::_setErrorHandlers($error, $exception);
 
+			trigger_error('3', E_ERROR);
+			throw new \SuaraBaseException('31231');
+
 			//重置
 			restore_error_handler();
 
