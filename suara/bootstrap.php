@@ -72,10 +72,13 @@ define('VENDORS_PATH', SUARA_PATH.'vendors'.DIRECTORY_SEPARATOR);
 //设置默认sessions所报存的目录
 ini_set("session.save_path", CACHE_PATH."sessions");
 
+//global funcs
+require S_PATH.'globals.php';
 //载入核心启动文件
 require SUARA_CORE_PATH."Core".DIRECTORY_SEPARATOR."Kernel.php";
 //将系统异常加载进来
 require SUARA_CORE_PATH."Error".DIRECTORY_SEPARATOR."exceptions.php";
+
 //启用spl自动加载功能
 spl_autoload_register(array("Kernel", "load"));
 
@@ -84,7 +87,22 @@ use Suara\libs\Error\ErrorHandler;
 //启用配置文件调用
 use Suara\libs\Core\Configure;
 
-//Configure::write("App");
+if (!defined('SITE_URL')) {
+	$s = null;
+	if (env('HTTPS')) {
+		$s = "s";
+	}
+
+	$httpHost = env('HTTP_HOST');
+
+	if (isset($httpHost)) {
+		define('SITE_URL', 'http' . $s . "://" . $httpHost);
+	}
+	unset($s, $httpHost);
+}
+
+Configure::bootstrap(isset($boot) ? $boot : true);
+
 //register_template_data("site_config", s_core::load_config("system"));
 //if(s_core::load_config('system','gzip') && function_exists('ob_gzhandler') && !ini_get('zlib.output_compression')) {
 //	ob_start('ob_gzhandler');

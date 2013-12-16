@@ -10,7 +10,6 @@
  * @author wolftankk@plu.cn
  *
  */
-namespace Suara\libs\Core;
 defined('IN_SUARA') or exit('Permission deiened');
 
 class Kernel {
