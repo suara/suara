@@ -1,5 +1,5 @@
 <?php
-namespace Suara\libs\Log\SuaraLog;
+namespace Suara\Libs\Log\SuaraLog;
 
 /**
  * 用于记录系统运行时候的相关信息到文件中。

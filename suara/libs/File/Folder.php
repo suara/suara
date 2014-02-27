@@ -1,5 +1,5 @@
 <?php
-namespace Suara\libs\File;
+namespace Suara\Libs\File;
 
 class Folder {
 

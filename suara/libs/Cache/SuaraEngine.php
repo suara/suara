@@ -1,5 +1,5 @@
 <?php
-namespace Suara\libs\Cache;
+namespace Suara\Libs\Cache;
 
 abstract class CacheEngine {
 	

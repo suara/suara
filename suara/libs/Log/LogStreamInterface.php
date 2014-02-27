@@ -1,5 +1,5 @@
 <?php
-namespace Suara\libs\Log;
+namespace Suara\Libs\Log;
 
 /**
  * LogStreamInterface

@@ -4,8 +4,8 @@
  * @author wolftankk@plu.cn
  * 配置文件读取器
  */
-namespace Suara\libs\Core;
-use Suara\libs\Configure\ConfigureReaderInterface;
+namespace Suara\Libs\Core;
+use Suara\Libs\Configure\ConfigureReaderInterface;
 
 defined('IN_SUARA') or exit('Permission deiened');
 
@@ -38,10 +38,10 @@ class Configure {
 			}
 
 			$exception = array(
-				'handler' => 'Suara\libs\Error\ErrorHandler::handleException'
+				'handler' => 'Suara\Libs\Error\ErrorHandler::handleException'
 			);
 			$error = array(
-				'handler' => 'Suara\libs\Error\ErrorHandler::handleError',
+				'handler' => 'Suara\Libs\Error\ErrorHandler::handleError',
 				'level'   => E_ALL & ~E_DEPRECATED
 			);
 
@@ -161,7 +161,7 @@ class Configure {
 				return false;
 			}
 
-			self::config($config, new \Suara\libs\Configure\PhpReader);
+			self::config($config, new \Suara\Libs\Configure\PhpReader);
 		}
 
 		return self::$_readers[$config];

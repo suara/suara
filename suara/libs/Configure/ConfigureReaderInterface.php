@@ -1,5 +1,5 @@
 <?php
-namespace Suara\libs\Configure;
+namespace Suara\Libs\Configure;
 defined('IN_SUARA') or exit('Permission deiened');
 
 /**

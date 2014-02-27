@@ -1,5 +1,5 @@
 <?php
-namespace Suara\libs\View;
+namespace Suara\Libs\View;
 /**
  * View Renderer Interface
  * Every view must include *render* method

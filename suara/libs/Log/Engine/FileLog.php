@@ -1,7 +1,7 @@
 <?php
-namespace Suara\libs\Log\Engine;
+namespace Suara\Libs\Log\Engine;
 
-use Suara\libs\Log\LogStreamInterface;
+use Suara\Libs\Log\LogStreamInterface;
 
 class FileLog implements LogStreamInterface {
 	protected $_defaults = array(

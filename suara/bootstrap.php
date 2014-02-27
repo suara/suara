@@ -41,18 +41,20 @@ if (!defined("SUARA_APPS_PATH")) {
 /**
  * SUARA_MODULES_PATH
  * 单个应用所在的目录
+ * @TODO 需要启用
  */
-if (!defined("SUARA_MODULES_PATH")) {
-	define('SUARA_MODULES_PATH', SUARA_APPS_PATH."modules".DIRECTORY_SEPARATOR);
-}
+//if (!defined("SUARA_MODULES_PATH")) {
+//	define('SUARA_MODULES_PATH', SUARA_APPS_PATH."modules".DIRECTORY_SEPARATOR);
+//}
 
 /**
  * SUARA_TEMPLATE_PATH
  * 应用的模板路径
+ * @TODO 需要启用
  */
-if (!defined("SUARA_TEMPLATE_PATH")) {
-	define('SUARA_TEMPLATE_PATH', SUARA_APPS_PATH."templates".DIRECTORY_SEPARATOR);
-}
+//if (!defined("SUARA_TEMPLATE_PATH")) {
+//	define('SUARA_TEMPLATE_PATH', SUARA_APPS_PATH."templates".DIRECTORY_SEPARATOR);
+//}
 
 //cache目录 用于存放缓存文件，sessions
 define("CACHE_PATH", SUARA_PATH.'caches'.DIRECTORY_SEPARATOR);
@@ -78,30 +80,27 @@ require S_PATH.'globals.php';
 require SUARA_CORE_PATH."Core".DIRECTORY_SEPARATOR."Kernel.php";
 //将系统异常加载进来
 require SUARA_CORE_PATH."Error".DIRECTORY_SEPARATOR."exceptions.php";
-
 //启用spl自动加载功能
 spl_autoload_register(array("Kernel", "load"));
-
 //启用错误处理
-use Suara\libs\Error\ErrorHandler;
+use Suara\Libs\Error\ErrorHandler;
 //启用配置文件调用
-use Suara\libs\Core\Configure;
+use Suara\Libs\Core\Configure;
 
-if (!defined('SITE_URL')) {
-	$s = null;
-	if (env('HTTPS')) {
-		$s = "s";
-	}
-
-	$httpHost = env('HTTP_HOST');
-
-	if (isset($httpHost)) {
-		define('SITE_URL', 'http' . $s . "://" . $httpHost);
-	}
-	unset($s, $httpHost);
-}
-
+//booting..
 Configure::bootstrap(isset($boot) ? $boot : true);
+
+//if (!defined('SITE_URL')) {
+//	$s = null;
+//	if (env('HTTPS')) {
+//		$s = "s";
+//	}
+//	$httpHost = env('HTTP_HOST');
+//	if (isset($httpHost)) {
+//		define('SITE_URL', 'http' . $s . "://" . $httpHost);
+//	}
+//	unset($s, $httpHost);
+//}
 
 //register_template_data("site_config", s_core::load_config("system"));
 //if(s_core::load_config('system','gzip') && function_exists('ob_gzhandler') && !ini_get('zlib.output_compression')) {

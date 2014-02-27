@@ -1,5 +1,5 @@
 <?php
-namespace Suara\libs\View;
+namespace Suara\Libs\View;
 
 class SmartyView extends ViewRendererInterface {
     static private $registered_template_data = array();

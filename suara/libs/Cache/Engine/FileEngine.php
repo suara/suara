@@ -1,6 +1,6 @@
 <?php
-namespace Suara\libs\Cache\Engine;
-use Suara\libs\Cache\SuaraEngine;
+namespace Suara\Libs\Cache\Engine;
+use Suara\Libs\Cache\SuaraEngine;
 
 class FileEngine extends SuaraEngine {
 	protected $_setting = array(

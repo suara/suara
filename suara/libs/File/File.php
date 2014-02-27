@@ -1,7 +1,7 @@
 <?php
-namespace Suara\libs\File;
+namespace Suara\Libs\File;
 
-use Suara\libs\File\Folder;
+use Suara\Libs\File\Folder;
 
 class File {
 	public function __construct($path, $create = false, $mode = 0755) {

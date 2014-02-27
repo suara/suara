@@ -1,8 +1,8 @@
 <?php
-namespace Suara\libs\Error;
+namespace Suara\Libs\Error;
 defined('IN_SUARA') or exit('Permission deiened');
 
-use Suara\libs\Error\ExceptionRenderer;
+use Suara\Libs\Error\ExceptionRenderer;
 
 class ErrorHandler {
 	
@@ -14,11 +14,11 @@ class ErrorHandler {
 		if ( error_reporting() == 0 ) {
 			return false;
 		}
-		$config = \Suara\libs\Core\Configure::read('system', 'Error');
+		$config = \Suara\Libs\Core\Configure::read('system', 'Error');
 	}
 
 	public static function handleException(\Exception $e) {
-		$config = \Suara\libs\Core\Configure::read('system', 'Exception');
+		$config = \Suara\Libs\Core\Configure::read('system', 'Exception');
 	}
 
 	private static function _log() {

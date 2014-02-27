@@ -1,12 +1,12 @@
 <?php
 /**
- * Suara内核
+ * Suara Kernel
  *
  * 每个APP在引用根目录下的bootstrap后，会自动引用此文件。
  * 本文件主需要处理Suara系统基础性的东西，比如自动加载功能、
  * 文件导入功能等等。
  *
- * @package Core.Kernel
+ * @package Suara.Core.Kernel
  * @author wolftankk@plu.cn
  *
  */
@@ -15,7 +15,7 @@ defined('IN_SUARA') or exit('Permission deiened');
 class Kernel {
 	protected static $_map = array();
 
-	private static $classTypes = array("libs", "modules", "models");
+	private static $classTypes = array("Libs", "Plugins", "Apps");
 	
 	//以后会专门启用
 	//public static $legacy = array(
@@ -23,12 +23,14 @@ class Kernel {
 	//	'modules' => SUARA_MODULES_PATH,
 	//	//'models'  => S_PATH."models".DIRECTORY_SEPARATOR
 	//);
-
+	
 	/**
-	 * 处理自动加载类,通过调用use方法，获得namespace class的路径
-	 * 在Suara的namespce命名规则中， 以Suara开头，后面紧跟着类型
-	 * 该类别将会自动解析成相应的路径。目前支持三种: libs、 modules、
-	 * models。 之后为class所在的相对路径，比如说：
+	 * Suara内核自动加载类
+	 * 在php5.4的时候，引入了namespace概念，因此Suara整套框架体系
+	 * 都在在此基础上建立的。通过调用use方法，获得namespace class的路径
+	 * 在Suara的namespce命名规则中，以Suara开头，后面是请求的类型，一共
+	 * 支持三种: Libs, Plugins, Apps。 该类别将会自动解析成相应的路径。
+	 * 目前之后为class所在的相对路径，比如说：
 	 * Suara\libs\Core\Configure
 	 * 经过自动能解析后会变成 SUARA_CORE_PATH/libs/Core/Configure.php;
 	 *
@@ -41,7 +43,6 @@ class Kernel {
 			return false;
 		}
 
-		//获得3个参数值， Suara，类型 以及其他路径
 		list(, $type, $parts)= explode("\\", $className, 3);
 
 		if (!in_array($type, self::$classTypes)) {
@@ -50,14 +51,14 @@ class Kernel {
 
 		$path = "";
 		switch ($type) {
-			case "libs":
+			case "Libs":
 				$path = SUARA_CORE_PATH;
 				break;
-			case "modules":
-				$path = SUARA_MODULES_PATH;
+			case "Plugins":
+				$path = SUARA_PATH."plugins";
 				break;
-			case "models":
-				$path = S_PATH."models".DIRECTORY_SEPARATOR;
+			case "Apps":
+				$path = SUARA_APPS_PATH;
 				break;
 		}
 
