@@ -107,7 +107,6 @@ class Kernel {
 	}
 
 	protected static function _checkFatalError() {
-		//process error
 	}
 }
 ?>

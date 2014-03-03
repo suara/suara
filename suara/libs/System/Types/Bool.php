@@ -1,5 +1,5 @@
 <?php
-namespace Suara\libs\System\Types;
+namespace Suara\Libs\System\Types;
 
 class Bool extends Type {
 	public $_type = 'boolean';

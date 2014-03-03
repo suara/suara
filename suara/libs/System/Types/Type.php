@@ -1,5 +1,5 @@
 <?php
-namespace Suara\libs\System\Types;
+namespace Suara\Libs\System\Types;
 
 abstract class Type {
 	const __default = null;

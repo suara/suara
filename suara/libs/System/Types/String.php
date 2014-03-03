@@ -1,5 +1,5 @@
 <?php
-namespace Suara\libs\System\Types;
+namespace Suara\Libs\System\Types;
 
 /**
  * 由于php原来是没有oop的，所以string直接使用函数做处理的，
