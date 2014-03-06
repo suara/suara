@@ -1,6 +1,5 @@
 <?php
 namespace Suara\Libs\Log\Engine;
-
 use Suara\Libs\Log\LogStreamInterface;
 
 class FileLog implements LogStreamInterface {

@@ -3,9 +3,7 @@ namespace Suara\Libs\Error;
 defined('IN_SUARA') or exit('Permission deiened');
 
 use Suara\Libs\Error\ExceptionRenderer;
-
 class ErrorHandler {
-	
 	/**
 	 * 处理错误
 	 * @see http://www.php.net/manual/zh/function.set-error-handler.php

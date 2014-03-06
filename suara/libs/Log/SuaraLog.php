@@ -1,5 +1,7 @@
 <?php
-namespace Suara\Libs\Log\SuaraLog;
+namespace Suara\Libs\Log;
+
+use Suara\Libs\Log\LogEngineCollection;
 
 /**
  * 用于记录系统运行时候的相关信息到文件中。
@@ -14,9 +16,8 @@ namespace Suara\Libs\Log\SuaraLog;
  *
  * ### 记录范围
  */
-
-class SuaraLog {
-
+class Log {
+	private static $_Collection;
 	/**
 	 * Default log levels enum
 	 * http://tools.ietf.org/html/rfc5424
@@ -36,6 +37,7 @@ class SuaraLog {
 
 	protected static function _init() {
 		self::$_levels = self::$_defaultLevels;
+		self::$_Collection = new LogEngineCollection;
 	}
 
 	public static function config($key, $config) {
@@ -58,26 +60,13 @@ class SuaraLog {
 
 	}
 
-	public static function stream() {
-
+	public static function stream($streamName) {
+		if (empty(self::$_Collection)) {
+			self::_init();
+		}
 	}
 
-	/**
-	 * ### 类型:
-	 *  
-	 * - LOG_EMERG
-	 * - LOG_ALERT
-	 * - LOG_CRIT
-	 * - LOG_ERR
-	 * - LOG_WARNING
-	 * - LOG_NOTICE
-	 * - LOG_INFO
-	 * - LOG_DEBUG
-	 *
-	 * ### 使用方法:
-	 */
 	public static function write($type, $message, $scope = array()) {
-
 	}
 
 	public static function emergency($message, $scope = array()) {
@@ -108,4 +97,7 @@ class SuaraLog {
 
 	}
 }
+
+
+
 ?>
