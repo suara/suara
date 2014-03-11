@@ -79,8 +79,12 @@ if (!defined("APP_CONFIG_PATH")) {
 	define('APP_CONFIG_PATH', SUARA_APPS_PATH.'config'.DIRECTORY_SEPARATOR);
 }
 //wwwroot
-if (!defined("APP_CONFIG_PATH")) {
+if (!defined("APP_WWWROOT_PATH")) {
 	define('APP_WWWROOT_PATH', SUARA_APPS_PATH.'wwwroot'.DIRECTORY_SEPARATOR);
+}
+//modules
+if (!defined("APP_MODULE_PATH")) {
+	define('APP_MODULE_PATH', SUARA_APPS_PATH.'wwwroot'.DIRECTORY_SEPARATOR);
 }
 
 //global funcs
