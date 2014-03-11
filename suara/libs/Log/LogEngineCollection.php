@@ -11,7 +11,7 @@ class LogEngineCollection {
 		$logger = new $className($options);
 
 		if (!$logger instanceof ILogStream) {
-			throw new SuaraLogException("logger class $loggerName does not implements a write() method.");
+			throw new LogException("logger class $loggerName does not implements a write() method.");
 		}
 		$this->_loaded[$name] = $logger;
 		if ($enable) {
