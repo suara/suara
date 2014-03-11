@@ -34,9 +34,9 @@ class Configure {
 	 */
 	public static function bootstrap($boot = true) {
 		if ($boot) {
-			//if (!include SUARA_APPS_PATH.'Config'.DIRECTORY_SEPARATOR.'system.php') {
-			//	trigger_error('Cannot found the system php file', E_USER_ERROR);
-			//}
+			if (!include APP_CONFIG_PATH.DIRECTORY_SEPARATOR.'system.php') {
+				trigger_error('Cannot found the system php file', E_USER_ERROR);
+			}
 
 			$exception = array(
 				'handler' => 'Suara\Libs\Error\ErrorHandler::handleException'
@@ -55,10 +55,11 @@ class Configure {
 
 			//重置
 			restore_error_handler();
-		//	self::_setErrorHandlers(
-		//		self::$_values['system']['Error'],
-		//		self::$_values['system']['Exception']
-		//	);
+
+			self::_setErrorHandlers(
+				self::$_values['system']['Error'],
+				self::$_values['system']['Exception']
+			);
 		}
 	}
 

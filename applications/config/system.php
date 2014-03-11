@@ -1,5 +1,5 @@
 <?php
-use Suara\libs\Core\Configure;
+use Suara\Libs\Core\Configure;
 
 Configure::write('system', 'debug', 2);
 Configure::write('system', 'Error', array(
@@ -12,7 +12,6 @@ Configure::write('system', 'Exception', array(
 	'renderer'=> 'Suara\libs\Error\ExceptionRenderer',
 	'log'     => true
 ));
-
 Configure::write('system', 'charset', 'utf-8');
 
 //$config = array(
@@ -23,5 +22,4 @@ Configure::write('system', 'charset', 'utf-8');
 //    'valid_key' => '',
 //    'gzip' => 1
 //);
-
 ?>

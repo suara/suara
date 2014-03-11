@@ -7,10 +7,10 @@ class PhpReader implements IConfigureReader {
 
 	public function __construct($path = null) {
 		if (!$path) {
-			$path = CONFIG_PATH;
+			$path = APP_CONFIG_PATH;
 		}
 
-		$this->_path = CONFIG_PATH;
+		$this->_path = APP_CONFIG_PATH;
 	}
 	
 	public function read($key) {
@@ -25,6 +25,7 @@ class PhpReader implements IConfigureReader {
 		}
 
 		include $file;
+
 		if (!isset($config)) {
 			throw new \ConfigureException('No variable $config found in '.$file); 
 		}
