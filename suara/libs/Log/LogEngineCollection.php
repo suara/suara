@@ -1,7 +1,6 @@
 <?php
 namespace Suara\Libs\Log;
-use Suara\Libs\Log\LogStreamInterface;
-
+use Suara\Libs\Log\ILogStream;
 
 class LogEngineCollection {
 	public function load($name, $options = array()) {
@@ -11,7 +10,7 @@ class LogEngineCollection {
 		$className = $this->_getLogger($loggerName);
 		$logger = new $className($options);
 
-		if (!$logger instanceof LogStreamInterface) {
+		if (!$logger instanceof ILogStream) {
 			throw new SuaraLogException("logger class $loggerName does not implements a write() method.");
 		}
 		$this->_loaded[$name] = $logger;
@@ -28,7 +27,7 @@ class LogEngineCollection {
 		$class = __NAMESPACE__."\\"."Engine"."\\".$loggerName;
 
 		if (!class_exists($class)) {
-			throw new SuaraLogException("Cound not load class $loggerName");
+			throw new LogException("Cound not load class $loggerName");
 		}
 
 		return $class;

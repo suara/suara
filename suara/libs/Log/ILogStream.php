@@ -4,7 +4,7 @@ namespace Suara\Libs\Log;
 /**
  * LogStreamInterface
  */
-interface LogStreamInterface {
+interface ILogStream {
 	/**
 	 * 每个Logger必须要都要有write的实现
 	 * @param string $type

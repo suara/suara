@@ -1,5 +1,6 @@
 <?php
 namespace Suara\Libs\Log;
+use Suara\Libs\Log\LogEngineCollection;
 
 /**
  * 用于记录系统运行时候的相关信息到文件中。
@@ -36,6 +37,7 @@ class Log {
 
 	protected static function _init() {
 		self::$_levels = self::$_defaultLevels;
+		self::$_Collection = new LogEngineCollection;
 	}
 
 	public static function config($key, $config) {

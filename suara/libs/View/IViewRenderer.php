@@ -5,7 +5,7 @@ namespace Suara\Libs\View;
  * Every view must include *render* method
  */
 
-interface ViewRendererInterface {
+interface IViewRenderer {
 	/**
 	 * 模板调用
 	 * @param string $module 这个模板所在的模块. 模板是按照模块目录分放的

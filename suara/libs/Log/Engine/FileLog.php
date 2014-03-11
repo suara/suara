@@ -1,8 +1,8 @@
 <?php
 namespace Suara\Libs\Log\Engine;
-use Suara\Libs\Log\LogStreamInterface;
+use Suara\Libs\Log\ILogStream;
 
-class FileLog implements LogStreamInterface {
+class FileLog implements ILogStream {
 	protected $_defaults = array(
 		'path' => LOGS_PATH,
 		'file' => null,
