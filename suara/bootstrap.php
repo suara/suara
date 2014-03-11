@@ -73,6 +73,10 @@ use Suara\Libs\Core\Configure;
 //booting..
 Configure::bootstrap(isset($boot) ? $boot : true);
 
+use Suara\Libs\Http\Request;
+
+new Request();
+
 /**
  * SUARA_MODULES_PATH
  * 单个应用所在的目录
@@ -120,11 +124,5 @@ if (!defined('SITE_URL')) {
 	}
 	unset($s, $httpHost);
 }
-
 //register_template_data("site_config", s_core::load_config("system"));
-//if(s_core::load_config('system','gzip') && function_exists('ob_gzhandler') && !ini_get('zlib.output_compression')) {
-//	ob_start('ob_gzhandler');
-//} else {
-//	ob_start();
-//}
 ?>
