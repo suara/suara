@@ -50,12 +50,38 @@ if (!defined("SUARA_PLUGINS_PATH")) {
 	define('SUARA_PLUGINS_PATH', SUARA_PATH."plugins".DIRECTORY_SEPARATOR);
 }
 
+define('VENDORS_PATH', SUARA_PATH.'vendors'.DIRECTORY_SEPARATOR);
+
 const S_PATH = S_PATH;
 const SUARA_CORE_PATH = SUARA_CORE_PATH;
 const SUARA_PATH = SUARA_PATH;
 const SUARA_APPS_PATH = SUARA_APPS_PATH;
 const SUARA_PLUGINS_PATH = SUARA_PLUGINS_PATH;
 
+/**
+ * app template
+ * 应用的模板路径
+ * @TODO 需要启用
+ */
+if (!defined("SUARA_TEMPLATE_PATH")) {
+	define('SUARA_TEMPLATE_PATH', SUARA_APPS_PATH."templates".DIRECTORY_SEPARATOR);
+}
+//app cache目录 用于存放缓存文件，sessions
+if (!defined("APP_CACHE_PATH")) {
+	define("APP_CACHE_PATH", SUARA_APPS_PATH.'caches'.DIRECTORY_SEPARATOR);
+}
+//logs目录 用于存放记录文件
+if (!defined("APP_LOGS_PATH")) {
+	define('APP_LOGS_PATH', SUARA_APPS_PATH.'logs'.DIRECTORY_SEPARATOR);
+}
+//config目录
+if (!defined("APP_CONFIG_PATH")) {
+	define('APP_CONFIG_PATH', SUARA_APPS_PATH.'config'.DIRECTORY_SEPARATOR);
+}
+//wwwroot
+if (!defined("APP_CONFIG_PATH")) {
+	define('APP_WWWROOT_PATH', SUARA_APPS_PATH.'wwwroot'.DIRECTORY_SEPARATOR);
+}
 
 //global funcs
 require S_PATH.'globals.php';
@@ -69,49 +95,8 @@ spl_autoload_register(array("Suara\Libs\Core\Kernel", "load"));
 use Suara\Libs\Error\ErrorHandler;
 //启用配置文件调用
 use Suara\Libs\Core\Configure;
-
-//booting..
-Configure::bootstrap(isset($boot) ? $boot : true);
-
-use Suara\Libs\Http\Request;
-
-new Request();
-
-/**
- * SUARA_MODULES_PATH
- * 单个应用所在的目录
- * @TODO 需要启用
- */
-//if (!defined("SUARA_MODULES_PATH")) {
-//	define('SUARA_MODULES_PATH', SUARA_APPS_PATH."modules".DIRECTORY_SEPARATOR);
-//}
-/**
- * SUARA_TEMPLATE_PATH
- * 应用的模板路径
- * @TODO 需要启用
- */
-//if (!defined("SUARA_TEMPLATE_PATH")) {
-//	define('SUARA_TEMPLATE_PATH', SUARA_APPS_PATH."templates".DIRECTORY_SEPARATOR);
-//}
-
-//cache目录 用于存放缓存文件，sessions
-//define("CACHE_PATH", SUARA_PATH.'caches'.DIRECTORY_SEPARATOR);
-//
-////logs目录 用于存放记录文件
-//define('LOGS_PATH', SUARA_PATH.'logs'.DIRECTORY_SEPARATOR);
-//
-////config目录
-//define('CONFIG_PATH', SUARA_PATH.'config'.DIRECTORY_SEPARATOR);
-//
-////wwwroot
-//define('WWWROOT_PATH', SUARA_APPS_PATH.'wwwroot'.DIRECTORY_SEPARATOR);
-//
-////verdors
-//define('VENDORS_PATH', SUARA_PATH.'vendors'.DIRECTORY_SEPARATOR);
-//
-////设置默认sessions所报存的目录
+//设置默认sessions所报存的目录
 //ini_set("session.save_path", CACHE_PATH."sessions");
-//
 
 if (!defined('SITE_URL')) {
 	$s = null;
@@ -124,5 +109,7 @@ if (!defined('SITE_URL')) {
 	}
 	unset($s, $httpHost);
 }
-//register_template_data("site_config", s_core::load_config("system"));
+
+//booting..
+Configure::bootstrap(isset($boot) ? $boot : true);
 ?>
