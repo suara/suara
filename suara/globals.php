@@ -1,4 +1,6 @@
 <?php
+namespace Suara;
+
 /**
  * 返回经addslashes处理过的字符串或数组
  * @param $string 需要处理的字符串或数组
@@ -54,8 +56,6 @@ function safe_replace($string) {
 	return $string;
 }
 
-
-
 /**
  * 过滤ASCII码从0-28的控制字符
  * @return String
@@ -96,7 +96,6 @@ function get_url() {
 	$relate_url = isset($_SERVER['REQUEST_URI']) ? safe_replace($_SERVER['REQUEST_URI']) : $php_self.(isset($_SERVER['QUERY_STRING']) ? '?'.safe_replace($_SERVER['QUERY_STRING']) : $path_info);
 	return $sys_protocal.(isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : '').$relate_url;
 }
-
 
 /**
  * 字符截取 支持UTF8/GBK
@@ -168,14 +167,14 @@ function str_cut($string, $length, $dot = '...') {
  * @return ip地址
  */
 function ip() {
-	if(getenv('HTTP_CLIENT_IP') && strcasecmp(getenv('HTTP_CLIENT_IP'), 'unknown')) {
-		$ip = getenv('HTTP_CLIENT_IP');
-	} elseif(getenv('HTTP_X_FORWARDED_FOR') && strcasecmp(getenv('HTTP_X_FORWARDED_FOR'), 'unknown')) {
-		$ip = getenv('HTTP_X_FORWARDED_FOR');
-	} elseif(getenv('REMOTE_ADDR') && strcasecmp(getenv('REMOTE_ADDR'), 'unknown')) {
-		$ip = getenv('REMOTE_ADDR');
-	} elseif(isset($_SERVER['REMOTE_ADDR']) && $_SERVER['REMOTE_ADDR'] && strcasecmp($_SERVER['REMOTE_ADDR'], 'unknown')) {
-		$ip = $_SERVER['REMOTE_ADDR'];
+	if(env('HTTP_CLIENT_IP') && strcasecmp(env('HTTP_CLIENT_IP'), 'unknown')) {
+		$ip = env('HTTP_CLIENT_IP');
+	} elseif(env('HTTP_X_FORWARDED_FOR') && strcasecmp(env('HTTP_X_FORWARDED_FOR'), 'unknown')) {
+		$ip = env('HTTP_X_FORWARDED_FOR');
+	} elseif(env('REMOTE_ADDR') && strcasecmp(env('REMOTE_ADDR'), 'unknown')) {
+		$ip = env('REMOTE_ADDR');
+	} elseif(env('REMOTE_ADDR') && strcasecmp(env('REMOTE_ADDR'), 'unknown')) {
+		$ip = env('REMOTE_ADDR');
 	}
 	return preg_match ( '/[\d\.]{7,15}/', $ip, $matches ) ? $matches [0] : '';
 }
@@ -195,6 +194,134 @@ function random($length, $chars = '0123456789') {
 	}
 	return $hash;
 }
+
+/**
+ * get an environment variable from available sources.
+ * @param string $key 
+ * @return
+ */
+function env($key) {
+	if ($key === 'HTTPS') {
+		if (isset($_SERVER['HTTPS'])) {
+			return (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off');
+		}
+
+		return (strpos(env('SCRIPT_URI'), 'https://') === 0);
+	}
+
+	if ($key === 'SCRIPT_NAME') {
+		if (env('CGI_MODE') && isset($_ENV['SCRIPT_URL'])) {
+			$key = 'SCRIPT_URL';
+		}
+	}
+
+	$val = null;
+	if (isset($_SERVER[$key])) {
+		$val = $_SERVER[$key];
+	} elseif (isset($_ENV[$key])){
+		$val = $_ENV[$key];
+	} elseif (getenv($key) !== false) {
+		$val = getenv($key);
+	}
+
+	if ($key === 'REMOTE_ADDR' && $val === env('SERVER_ADDR')) {
+		$addr = env('HTTP_PC_REMOTE_ADDR');
+		if ($addr != null) {
+			$val = $addr;
+		}
+	}
+
+	if ($val != null) {
+		return $val;
+	}
+
+	switch ($key) {
+		case 'DOCUMENT_ROOT':
+			$name = env('SCRIPT_NAME');
+			$filename = env("SCRIPT_FILENAME");
+			$offset = 0;
+			if (!strpos($name, '.php')) {
+				$offset = 4;
+			}
+			return substr($filename, 0, -(strlen($name) + $offset));
+		case 'PHP_SELF':
+			return str_replace(env('DOCUMENT_ROOT'), '', env('SCRIPT_FILENAME'));
+		case 'CGI_MODE':
+			return (PHP_SAPI === 'cgi');
+		case 'HTTP_BASE':
+			$host = env('HTTP_HOST');
+			$parts = explode('.', $host);
+			$count = count($parts);
+			if ($count == 1) {
+				return '.'.$host;
+			} elseif ($count == 2) {
+				return '.' . $host;
+			} elseif ($count == 3) {
+				$ds = array('com', 'cn', 'org', 'gov');
+				if (in_array($parts[1], $ds)) {
+					return '.'.$host;
+				}
+			}
+			array_shift($parts);
+			return '.'. implode('.', $parts);
+		}
+
+	return null;
+}
+
+
+
+
+/**
+ * Cache
+ */
+function setcache($name, $data, $filepath = '', $type = 'file', $config='', $timeout=30) {
+	s_core::load_sys_class('cache_factory', '', 0);
+	if ($config) {
+		$cacheconfig = s_core::load_config('cache');
+		$cache = cache_factory::get_instance($cacheconfig)->get_cache($config);
+	} else {
+		$cache = cache_factory::get_instance()->get_cache($type);
+	}
+
+	//clear 
+	return $cache->set($name, $data, $timeout, '', $filepath);
+}
+
+function getcache($name, $filepath='', $type='file', $config='') {
+	s_core::load_sys_class('cache_factory', '', 0);
+	if ($config) {
+		$cacheconfig = s_core::load_config('cache');
+		$cache = cache_factory::get_instance($cacheconfig)->get_cache($config);
+	} else {
+		$cache = cache_factory::get_instance()->get_cache($type);
+	}
+
+	return $cache->get($name, '', $filepath);
+}
+
+function delcache($name, $filepath='', $type='file', $config='') {
+	s_core::load_sys_class('cache_factory', '', 0);
+	if ($config) {
+		$cacheconfig = s_core::load_config('cache');
+		$cache = cache_factory::get_instance($cacheconfig)->get_cache($config);
+	} else {
+		$cache = cache_factory::get_instance()->get_cache($type);
+	}
+	return $cache->delete($name, '', '', $filepath);
+}
+
+function getcacheinfo($name, $filepath ='', $type='file', $config='') {
+	s_core::load_sys_class('cache_factory', '', 0);
+	if ($config) {
+		$cacheconfig = s_core::load_config('cache');
+		$cache = cache_factory::get_instance($cacheconfig)->get_cache($config);
+	} else {
+		$cache = cache_factory::get_instance()->get_cache($config);
+	}
+	return $cache->cacheinfo($name, '', '', $filepath);
+}
+
 
 /**
  * 将字符串转换为数组
@@ -355,322 +482,5 @@ if (!function_exists('iconv')) {
 	}
 }
 
-/**
- * Cache
- */
-function setcache($name, $data, $filepath = '', $type = 'file', $config='', $timeout=30) {
-	s_core::load_sys_class('cache_factory', '', 0);
-	if ($config) {
-		$cacheconfig = s_core::load_config('cache');
-		$cache = cache_factory::get_instance($cacheconfig)->get_cache($config);
-	} else {
-		$cache = cache_factory::get_instance()->get_cache($type);
-	}
-
-	//clear 
-	return $cache->set($name, $data, $timeout, '', $filepath);
-}
-
-function getcache($name, $filepath='', $type='file', $config='') {
-	s_core::load_sys_class('cache_factory', '', 0);
-	if ($config) {
-		$cacheconfig = s_core::load_config('cache');
-		$cache = cache_factory::get_instance($cacheconfig)->get_cache($config);
-	} else {
-		$cache = cache_factory::get_instance()->get_cache($type);
-	}
-
-	return $cache->get($name, '', $filepath);
-}
-
-function delcache($name, $filepath='', $type='file', $config='') {
-	s_core::load_sys_class('cache_factory', '', 0);
-	if ($config) {
-		$cacheconfig = s_core::load_config('cache');
-		$cache = cache_factory::get_instance($cacheconfig)->get_cache($config);
-	} else {
-		$cache = cache_factory::get_instance()->get_cache($type);
-	}
-	return $cache->delete($name, '', '', $filepath);
-}
-
-function getcacheinfo($name, $filepath ='', $type='file', $config='') {
-	s_core::load_sys_class('cache_factory', '', 0);
-	if ($config) {
-		$cacheconfig = s_core::load_config('cache');
-		$cache = cache_factory::get_instance($cacheconfig)->get_cache($config);
-	} else {
-		$cache = cache_factory::get_instance()->get_cache($config);
-	}
-	return $cache->cacheinfo($name, '', '', $filepath);
-}
-
-/**
- * 生成缩略图
- * @param $imgurl 图片路径
- * @param $width 缩略图的宽度
- * @param $height 缩略图的高度
- * @param $autocut 是否自动裁剪
- * @param $smallpic 无图片时, 返回一张默认图片
- */
-function thumb($imgurl, $width=100, $height=100, $autocut=1, $smallpic='nopic.gif') {
-	global $image;
-
-	if (!is_object($image)) {
-		s_core::load_sys_class("image", "", false);
-		$image = new image(true);
-	}
-}
-
-/**
- * 获取服务器参数
- */
-function env($key) {
-	if ($key === 'HTTPS') {
-		if (isset($_SERVER['HTTPS'])) {
-			return (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off');
-		}
-
-		return (strpos(env('SCRIPT_URI'), 'https://') === 0);
-	}
-
-	if ($key === 'SCRIPT_NAME') {
-		if (env('CGI_MODE') && isset($_ENV['SCRIPT_URL'])) {
-			$key = 'SCRIPT_URL';
-		}
-	}
-
-	$val = null;
-	if (isset($_SERVER[$key])) {
-		$val = $_SERVER[$key];
-	} elseif (isset($_ENV[$key])){
-		$val = $_ENV[$key];
-	} elseif (getenv($key) !== false) {
-		$val = getenv($key);
-	}
-
-	if ($key === 'REMOTE_ADDR' && $val === env('SERVER_ADDR')) {
-		$addr = env('HTTP_PC_REMOTE_ADDR');
-		if ($addr != null) {
-			$val = $addr;
-		}
-	}
-
-	if ($val != null) {
-		return $val;
-	}
-
-	switch ($key) {
-	case 'DOCUMENT_ROOT':
-		$name = env('SCRIPT_NAME');
-		$filename = env("SCRIPT_FILENAME");
-		$offset = 0;
-		if (!strpos($name, '.php')) {
-			$offset = 4;
-		}
-		return substr($filename, 0, -(strlen($name) + $offset));
-	case 'PHP_SELF':
-		return str_replace(env('DOCUMENT_ROOT'), '', env('SCRIPT_FILENAME'));
-	case 'CGI_MODE':
-		return (PHP_SAPI === 'cgi');
-	case 'HTTP_BASE':
-		$host = env('HTTP_HOST');
-		$parts = explode('.', $host);
-		$count = count($parts);
-		if ($count == 1) {
-			return '.'.$host;
-		} elseif ($count == 2) {
-			return '.' . $host;
-		} elseif ($count == 3) {
-			$ds = array('com', 'cn', 'org', 'gov');
-			if (in_array($parts[1], $ds)) {
-				return '.'.$host;
-			}
-		}
-		array_shift($parts);
-		return '.'. implode('.', $parts);
-	}
-
-	return null;
-}
-
-function host() {
-	return $_SERVER['HTTP_HOST'];
-}
-
-/**
- * 获得当前域
- */
-function domain($tl_length = 1) {
-	$host = host();
-	$domain = array_slice(explode(".", $host), -1 * (1 + $tl_length));
-	$domain = join(".", $domain);
-	return $domain;
-}
-
-/**
- * 分页函数
- *
- * @param $totalCount 数据总数
- * @param $currentPage 当前页数
- * @param $pagesize 每页显示数量
- * @param $urlrule URL规则
- * @param $array 需要传递的数据 
- *
- * @return 
- */
-function pages($totalCount, $currentPage, $pagesize=20, $urlrule='', $array=array(), $setpages=5) {
-	if (!class_exists('Paginate')) {
-		s_core::load_sys_class('paginator', '', 0);
-	}
-	$p = new Paginate(array(
-		'item_count' => $totalCount,
-		'page' => $currentPage,
-		'items_per_page' => $pagesize,
-		'template' => 'pages/bs2'
-	), '', $urlrule, $array);
-
-	return $p->getPages(floor($setpages / 2));
-}
-
-/**
- * 生成上传附件验证
- * @param $args   参数
- * @param $operation   操作类型(加密解密)
- */
-function upload_key($args) {
-	$pc_auth_key = md5(s_core::load_config('system','auth_key').$_SERVER['HTTP_USER_AGENT']);
-	$authkey = md5($args.$pc_auth_key);
-	return $authkey;
-}
-
-/**
- *  短消息函数,可以在某个动作处理后友好的提示信息
- *
- * @param     string  $msg      消息提示信息
- * @param     string  $gourl    跳转地址
- * @param     int     $onlymsg  仅显示信息
- * @param     int     $limittime  限制时间
- * @return    void
- */
-function ShowMsg($msg, $gourl, $onlymsg=0, $limittime=0) {
-	$htmlhead  = "<html>\r\n<head>\r\n<title>提示信息</title>\r\n<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />\r\n";
-	$htmlhead .= "<base target='_self'/>\r\n<style>div{line-height:160%;}</style></head>\r\n<body leftmargin='0' topmargin='0' bgcolor='#efefef'>\r\n<center>\r\n<script>\r\n";
-	$htmlfoot  = "</script>\r\n</center>\r\n</body>\r\n</html>\r\n";
-	$litime = ($limittime==0 ? 1000 : $limittime);
-	$func = '';
-
-	if ($gourl=='-1') {
-		if ($limittime==0) $litime = 5000;
-		$gourl = "javascript:history.go(-1);";
-	}
-
-	if ($gourl=='' || $onlymsg==1) {
-		$msg = "<script>alert(\"".str_replace("\"","“",$msg)."\");</script>";
-	} else {
-		//当网址为:close::objname 时, 关闭父框架的id=objname元素
-		if (preg_match('/close::/',$gourl)) {
-			$tgobj = trim(preg_replace('/close::/', '', $gourl));
-			$gourl = 'javascript:;';
-			$func .= "window.parent.document.getElementById('{$tgobj}').style.display='none';\r\n";
-		}
-		$func .= "      var pgo=0;
-		function JumpUrl(){
-			if(pgo==0){ location='$gourl'; pgo=1; }
-	}\r\n";
-	$rmsg = $func;
-	$rmsg .= "document.write(\"<br /><div style='width:450px;padding:0px;border-radius: 4px;font-size:16px;background:#ffffff;height:130px;'><br />\");\r\n";
-	$rmsg .= "document.write(\"".str_replace("\"","“",$msg)."\");\r\n";
-	$rmsg .= "document.write(\"";
-
-	if ($onlymsg==0) {
-		if ( $gourl != 'javascript:;' && $gourl != '') {
-			$rmsg .= "<br /><a href='{$gourl}'>如果你的浏览器没反应，请点击这里...</a>";
-			$rmsg .= "<br/></div>\");\r\n";
-			$rmsg .= "setTimeout('JumpUrl()',$litime);";
-		} else {
-			$rmsg .= "<br/></div>\");\r\n";
-		}
-	} else {
-		$rmsg .= "<br/><br/></div>\");\r\n";
-	}
-	$msg  = $htmlhead.$rmsg.$htmlfoot;
-	}
-	echo $msg;
-}
-
-/**
- * random uuid
- * @see http://www.ietf.org/rfc/rfc4122.txt
- */
-function uuid() {
-	$node = env('SERVER_ADDR');
-	if (strpos($node, ':') !== false) {
-		if (substr_count($node, '::')) {
-			$node = str_replace(
-				'::', str_repeat(':0000', 8 - substr_count($node, ':')) . ':', $node
-			);
-		}
-		$node = explode(':', $node);
-		$ipSix = '';
-
-		foreach ($node as $id) {
-			/**
-			 * STR_PAD_LEFT
-			 * @see http://www.php.net/manual/en/function.str-pad.php
-			 */
-			$ipSix .= str_pad(base_convert($id, 16, 2), 16, 0, STR_PAD_LEFT);
-		}
-		$node = base_convert($ipSix, 2, 10);
-
-		if (strlen($node) < 38) {
-			$node = null;
-		} else {
-			$node = crc32($node);
-		}
-	} elseif (empty($node)) {
-		$host = env('HOSTNAME');
-
-		if (empty($host)) {
-			$host = env('HOST');
-		}
-
-		if (!empty($host)) {
-			$ip = gethostbyname($host);
-
-			if ($ip === $host) {
-				$node = crc32($host);
-			} else {
-				$node = ip2long($ip);
-			}
-		}
-	} elseif ($node !== '127.0.0.1') {
-		$node = ip2long($node);
-	} else {
-		$node = null;
-	}
-
-	if (empty($node)) {
-		$node = hash('crc32', s_core::load_config('system', 'auth_key'));
-	}
-
-	if (function_exists('hphp_get_thread_id')) {
-		$pid = hphp_get_thread_id();
-	} elseif (function_exists('zend_thread_id')) {
-		$pid = zend_thread_id();
-	} else {
-		$pid = getmypid();
-	}
-
-	if (!$pid || $pid > 65535) {
-		$pid = mt_rand(0, 0xfff) | 0x4000;
-	}
-
-	list($timeMid, $timeLow) = explode(' ', microtime());
-	return sprintf(
-		"%08x-%04x-%04x-%02x%02x-%04x%08x", (int)$timeLow, (int)substr($timeMid, 2) & 0xffff,
-		mt_rand(0, 0xfff) | 0x4000, mt_rand(0, 0x3f) | 0x80, mt_rand(0, 0xff), $pid, $node
-	);
-}
 
 ?>

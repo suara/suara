@@ -1,5 +1,7 @@
 <?php
-class SuaraBaseException extends RuntimeException {
+namespace Suara\Libs\Error;
+
+class BaseException extends \RuntimeException {
 	protected $_responseHeaders = null;
 
 	public function responseHeader() {
@@ -18,7 +20,7 @@ class SuaraBaseException extends RuntimeException {
 }
 
 if (!class_exists('HttpException', false)) {
-	class HttpException extends SuaraBaseException {
+	class HttpException extends BaseException {
 	}
 }
 
@@ -57,28 +59,28 @@ class InternalErrorException extends HttpException {
 
 }
 
-class SuaraException extends SuaraBaseException {
+class Exception extends BaseException {
 
 }
 
 //missing controller exception
-class MissingControllerException extends SuaraException {
+class MissingControllerException extends Exception {
 
 }
 
-class MissingActionException extends SuaraException {
+class MissingActionException extends Exception {
 
 }
 
-class PrivateActionException extends SuaraException {
+class PrivateActionException extends Exception {
 
 }
 
-class ConfigureException extends SuaraException {
+class ConfigureException extends Exception {
 
 }
 
-class SuaraLogException extends SuaraException {
+class SuaraLogException extends Exception {
 
 }
 ?>

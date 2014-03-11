@@ -10,11 +10,11 @@
  * @author wolftankk@plu.cn
  *
  */
+namespace Suara\Libs\Core;
 defined('IN_SUARA') or exit('Permission deiened');
 
 class Kernel {
 	protected static $_map = array();
-
 	private static $classTypes = array("Libs", "Plugins", "Apps");
 	
 	//以后会专门启用
@@ -55,7 +55,7 @@ class Kernel {
 				$path = SUARA_CORE_PATH;
 				break;
 			case "Plugins":
-				$path = SUARA_PATH."plugins";
+				$path = SUARA_PLUGINS_PATH;
 				break;
 			case "Apps":
 				$path = SUARA_APPS_PATH;
@@ -66,7 +66,6 @@ class Kernel {
 		$file = $path.$normalizedClassName.".php";
 
 		$hashKey = md5($file);
-
 		if (!empty(self::$_map[$hashKey])) {
 			return true;
 		}
