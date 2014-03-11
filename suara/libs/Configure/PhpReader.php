@@ -1,8 +1,8 @@
 <?php
 namespace Suara\Libs\Configure;
-use Suara\Libs\Configure\ConfigureReaderInterface;
+use Suara\Libs\Configure\IConfigureReader;
 
-class PhpReader implements ConfigureReaderInterface {
+class PhpReader implements IConfigureReader {
 	protected $_path = null;
 
 	public function __construct($path = null) {

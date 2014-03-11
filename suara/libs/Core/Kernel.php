@@ -98,7 +98,7 @@ class Kernel {
 	}
 
 	public static function init() {
-		register_shutdown_function(array('Kernel', 'shutdown'));
+		register_shutdown_function(array('Suara\Libs\Core\Kernel', 'shutdown'));
 	}
 
 	public static function shutdown() {

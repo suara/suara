@@ -68,11 +68,10 @@ spl_autoload_register(array("Suara\Libs\Core\Kernel", "load"));
 //启用错误处理
 use Suara\Libs\Error\ErrorHandler;
 //启用配置文件调用
-new ErrorHandler;
-//use Suara\Libs\Core\Configure;
+use Suara\Libs\Core\Configure;
 
 //booting..
-//Configure::bootstrap(isset($boot) ? $boot : true);
+Configure::bootstrap(isset($boot) ? $boot : true);
 
 /**
  * SUARA_MODULES_PATH

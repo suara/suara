@@ -5,7 +5,9 @@
  * 配置文件读取器
  */
 namespace Suara\Libs\Core;
-use Suara\Libs\Configure\ConfigureReaderInterface;
+use Suara\Libs\Configure\IConfigureReader;
+use Suara\Libs\Configure\PhpReader;
+use Suara\Libs\Configure\IniReader;
 
 defined('IN_SUARA') or exit('Permission deiened');
 
@@ -32,10 +34,9 @@ class Configure {
 	 */
 	public static function bootstrap($boot = true) {
 		if ($boot) {
-			
-			if (!include CONFIG_PATH . 'system.php') {
-				trigger_error('Cannot found the system php file', E_USER_ERROR);
-			}
+			//if (!include SUARA_APPS_PATH.'Config'.DIRECTORY_SEPARATOR.'system.php') {
+			//	trigger_error('Cannot found the system php file', E_USER_ERROR);
+			//}
 
 			$exception = array(
 				'handler' => 'Suara\Libs\Error\ErrorHandler::handleException'
@@ -50,17 +51,14 @@ class Configure {
 			 */
 			self::_setErrorHandlers($error, $exception);
 
-			trigger_error('3', E_ERROR);
-			throw new \SuaraBaseException('31231');
+			trigger_error(11, E_ERROR);
 
 			//重置
 			restore_error_handler();
-
-
-			self::_setErrorHandlers(
-				self::$_values['system']['Error'],
-				self::$_values['system']['Exception']
-			);
+		//	self::_setErrorHandlers(
+		//		self::$_values['system']['Error'],
+		//		self::$_values['system']['Exception']
+		//	);
 		}
 	}
 
@@ -132,7 +130,7 @@ class Configure {
 	/**
 	 * 将Reader保存在pool中，避免重复创建，造成内存的浪费
 	 */
-	public static function config($name, ConfigureReaderInterface $reader) {
+	public static function config($name, IConfigureReader $reader) {
 		self::$_readers[$name] = $reader;
 	}
 	
@@ -161,7 +159,7 @@ class Configure {
 				return false;
 			}
 
-			self::config($config, new \Suara\Libs\Configure\PhpReader);
+			self::config($config, new PhpReader);
 		}
 
 		return self::$_readers[$config];

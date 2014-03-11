@@ -1,8 +1,8 @@
 <?php
 namespace Suara\Libs\Configure;
-use Suara\Libs\Configure\ConfigureReaderInterface;
+use Suara\Libs\Configure\IConfigureReader;
 
-class IniReader implements ConfigureReaderInterface {
+class IniReader implements IConfigureReader {
 
 }
 ?>
