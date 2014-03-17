@@ -1,4 +1,5 @@
 <?php
+namespace Suara\Libs\Controller;
 defined('IN_SUARA') or exit('Permission deiened');
 
 /**
@@ -10,7 +11,7 @@ class APIController {
 	private $name;
 	public function __construct($base, $name) {
 		$this->name = $name;
-		list($uri, ) = explode("?", $_SERVER['REQUEST_URI']);
+		list($uri, ) = explode("?", env('REQUEST_URI'));
 		$uri = strtolower($uri);
 
 		if (strpos($uri, $base) === 0){
@@ -80,7 +81,6 @@ class APIController {
 		}
 		echo $callback.'('.$json.')';
 	}
-
 }
 
 ?>

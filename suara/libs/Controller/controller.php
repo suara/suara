@@ -1,12 +1,8 @@
 <?php
+namespace Suara\Libs\Controller;
 
 class Controller {
-	public $name = null;
-
-	public function __construct() {
-		if ($this->$name == null) {
-			$this->$name = substr(get_class($this), 0, -10);
-		}
+	public function __construct($request = null, $response = null) {
 	}
 }
 
