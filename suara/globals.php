@@ -348,114 +348,12 @@ function array2string($data, $isformdata = 1) {
 }
 
 /**
- * 转换字节数为其他单位
- *
- *
- * @param	string	$filesize	字节大小
- * @return	string	返回大小
- */
-function sizecount($filesize) {
-	if ($filesize >= 1073741824) {
-		$filesize = round($filesize / 1073741824 * 100) / 100 .' GB';
-	} elseif ($filesize >= 1048576) {
-		$filesize = round($filesize / 1048576 * 100) / 100 .' MB';
-	} elseif($filesize >= 1024) {
-		$filesize = round($filesize / 1024 * 100) / 100 . ' KB';
-	} else {
-		$filesize = $filesize.' Bytes';
-	}
-	return $filesize;
-}
-
-/**
- * 字符串加密、解密函数
- *
- *
- * @param	string	$txt		字符串
- * @param	string	$operation	ENCODE为加密，DECODE为解密，可选参数，默认为ENCODE，
- * @param	string	$key		密钥：数字、字母、下划线
- * @param	string	$expiry		过期时间
- * @return	string
- */
-function sys_auth($string, $operation = 'ENCODE', $key = '', $expiry = 0) {
-	$key_length = 4;
-	$key = md5($key != '' ? $key : s_core::load_config('system', 'auth_key'));
-	$fixedkey = md5($key);
-	$egiskeys = md5(substr($fixedkey, 16, 16));
-	$runtokey = $key_length ? ($operation == 'ENCODE' ? substr(md5(microtime(true)), -$key_length) : substr($string, 0, $key_length)) : '';
-	$keys = md5(substr($runtokey, 0, 16) . substr($fixedkey, 0, 16) . substr($runtokey, 16) . substr($fixedkey, 16));
-	$string = $operation == 'ENCODE' ? sprintf('%010d', $expiry ? $expiry + time() : 0).substr(md5($string.$egiskeys), 0, 16) . $string : base64_decode(substr($string, $key_length));
-
-	$i = 0; $result = '';
-	$string_length = strlen($string);
-	for ($i = 0; $i < $string_length; $i++){
-		$result .= chr(ord($string{$i}) ^ ord($keys{$i % 32}));
-	}
-	if($operation == 'ENCODE') {
-		return $runtokey . str_replace('=', '', base64_encode($result));
-	} else {
-		if((substr($result, 0, 10) == 0 || substr($result, 0, 10) - time() > 0) && substr($result, 10, 16) == substr(md5(substr($result, 26).$egiskeys), 0, 16)) {
-			return substr($result, 26);
-		} else {
-			return '';
-		}
-	}
-}
-
-/**
- * 生成sql语句，如果传入$in_cloumn 生成格式为 IN('a', 'b', 'c')
- * @param $data 条件数组或者字符串
- * @param $front 连接符
- * @param $in_column 字段名称
- * @return string
- */
-function to_sqls($data, $front = ' AND ', $in_column = false) {
-	if($in_column && is_array($data)) {
-		$ids = '\''.implode('\',\'', $data).'\'';
-		$sql = "$in_column IN ($ids)";
-		return $sql;
-	} else {
-		if ($front == '') {
-			$front = ' AND ';
-		}
-		if(is_array($data) && count($data) > 0) {
-			$sql = '';
-			foreach ($data as $key => $val) {
-				$sql .= $sql ? " $front `$key` = '$val' " : " `$key` = '$val' ";
-			}
-			return $sql;
-		} else {
-			return $data;
-		}
-	}
-}
-
-/**
  * 生成随机字符串
  * @param string $lenth 长度
  * @return string 字符串
  */
 function create_randomstr($lenth = 4) {
 	return random($lenth, '123456789abcdefghijklmnpqrstuvwxyzABCDEFGHIJKLMNPQRSTUVWXYZ');
-}
-
-/**
- * Function dataformat
- * 时间转换
- * @param $n INT时间
- */
-function dataformat($n) {
-	$hours = floor($n/3600);
-	$minite	= floor($n%3600/60);
-	$secend = floor($n%3600%60);
-	$minite = $minite < 10 ? "0".$minite : $minite;
-	$secend = $secend < 10 ? "0".$secend : $secend;
-	if($n >= 3600){
-		return $hours.":".$minite.":".$secend;
-	}else{
-		return $minite.":".$secend;
-	}
-
 }
 
 /**
@@ -481,6 +379,4 @@ if (!function_exists('iconv')) {
 		}
 	}
 }
-
-
 ?>

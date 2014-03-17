@@ -13,6 +13,9 @@
  */
 namespace Suara;
 define("IN_SUARA", true);
+
+define('START_TIME', microtime(true));
+
 /**
  * S_PATH
  * Suara Library Path
@@ -88,7 +91,8 @@ if (!defined("APP_MODULE_PATH")) {
 }
 
 //global funcs
-require S_PATH.'globals.php';
+include_once S_PATH.'globals.php';
+
 //载入核心启动文件
 require SUARA_CORE_PATH."Core".DIRECTORY_SEPARATOR."Kernel.php";
 //将系统异常加载进来
@@ -99,8 +103,6 @@ spl_autoload_register(array("Suara\Libs\Core\Kernel", "load"));
 use Suara\Libs\Error\ErrorHandler;
 //启用配置文件调用
 use Suara\Libs\Core\Configure;
-//设置默认sessions所报存的目录
-//ini_set("session.save_path", CACHE_PATH."sessions");
 
 if (!defined('SITE_URL')) {
 	$s = null;
@@ -116,4 +118,7 @@ if (!defined('SITE_URL')) {
 
 //booting..
 Configure::bootstrap(isset($boot) ? $boot : true);
+
+//设置默认sessions所报存的目录
+//ini_set("session.save_path", CACHE_PATH."sessions");
 ?>

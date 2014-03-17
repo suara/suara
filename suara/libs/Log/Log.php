@@ -45,7 +45,10 @@ class Log {
 	}
 
 	public static function configured() {
-
+		if (empty(self::$_Collection)) {
+			self::_init();
+		}
+		self::$_Collection->loaded();
 	}
 
 	public static function levels() {
