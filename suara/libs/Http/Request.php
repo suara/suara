@@ -10,7 +10,7 @@ use Suara;
  */
 class Request{
 	public function __construct($url = null, $parseEnvironment = true) {
-		echo Suara\env('REQUEST_URI');
+		$this->_base();
 	}
 
 	/**
@@ -18,6 +18,8 @@ class Request{
 	 * 
 	 */
 	private function _base() {
+		#print_r($_SERVER);
+		#echo Suara\env('REQUEST_URI');
 	}
 }
 
