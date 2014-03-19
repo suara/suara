@@ -14,15 +14,8 @@ namespace Suara\Libs\Core;
 defined('IN_SUARA') or exit('Permission deiened');
 
 class Kernel {
-	protected static $_map = array();
-	private static $classTypes = array("Libs", "Plugins", "Apps");
-	
-	//以后会专门启用
-	//public static $legacy = array(
-	//	'libs'    => SUARA_CORE_PATH,
-	//	'modules' => SUARA_MODULES_PATH,
-	//	//'models'  => S_PATH."models".DIRECTORY_SEPARATOR
-	//);
+	protected static $_map = [];
+	private static $classTypes = ["Libs", "Plugins", "Apps"];
 	
 	/**
 	 * Suara内核自动加载类
@@ -98,7 +91,7 @@ class Kernel {
 	}
 
 	public static function init() {
-		register_shutdown_function(array('Suara\Libs\Core\Kernel', 'shutdown'));
+		register_shutdown_function(['Suara\Libs\Core\Kernel', 'shutdown']);
 	}
 
 	public static function shutdown() {

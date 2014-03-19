@@ -1,9 +1,8 @@
 <?php
 include dirname(dirname(dirname(__FILE__))).DIRECTORY_SEPARATOR."suara".DIRECTORY_SEPARATOR."bootstrap.php";
 
-
-
+use Suara\Libs\Routing\Dispatcher;
 use Suara\Libs\Http\Request;
 
-new Request();
+(new Dispatcher())->dispatch(new Request());
 ?>
