@@ -1,13 +1,36 @@
 <?
+/**
+ * Suara Bootstrap (http://suaraphp.com)
+ *
+ * Licensed under The MIT License
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @link          http://suaraphp.com
+ * @package       Suara.Libs.Routing
+ * @license       http://www.opensource.org/licenses/mit-license.php MIT License
+ * @author        wolftankk@gmail.com		  
+ */
 namespace Suara\Libs\Routing;
-
 use Suara\Libs\Http\Request as Request;
 
+//路由器模式
+// $router = [
+//   '/' => [controller, action, addtionsParams]
+//   '/:controller/'
+//   '/v1/:controller/:action'
+//
+// ]
 
 class Dispatcher {
 
 	public function dispatch(Request $request) {
+		
+
+
 		$controller = $this->_getController($request);
+
+		
 	}
 
 	protected function _getController($request) {
@@ -37,22 +60,6 @@ class Dispatcher {
 				return $class;
 			}
 		}
-		//$loadfile = S_PATH.'modules'.DIRECTORY_SEPARATOR.$m.DIRECTORY_SEPARATOR.$filename.".php";
-		//if (file_exists($loadfile)) {
-		//	$className = strtolower($filename);
-		//	include $loadfile;
-		//	if (class_exists($className)) {
-		//		if ($reflection->isAbstract() || $reflection->isInterface()) {
-		//			header("HTTP/1.0 404 Not Found");
-		//		} else {
-		//			return $reflection->newInstance();
-		//		}
-		//	} else {
-		//		header("HTTP/1.0 404 Not Found");
-		//	}
-		//} else {
-		//	header("HTTP/1.0 404 Not Found");
-		//}
 	}
 }
 
