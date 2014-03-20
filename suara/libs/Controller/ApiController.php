@@ -1,6 +1,5 @@
 <?php
 namespace Suara\Libs\Controller;
-defined('IN_SUARA') or exit('Permission deiened');
 
 /**
  * API Controller Abstra class

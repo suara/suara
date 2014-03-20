@@ -1,7 +1,24 @@
 <?php
-class redis_cache {
+/**
+ * Suara Bootstrap (http://suaraphp.com)
+ *
+ * Licensed under The MIT License
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @link          http://suaraphp.com
+ * @package       Suara.Libs.Cache.Engine
+ * @license       http://www.opensource.org/licenses/mit-license.php MIT License
+ * @author        wolftankk@gmail.com		  
+ */
+namespace Suara\Libs\Cache\Engine;
+use Suara\Libs\Cache\CacheEngine;
+
+class RedisEngine {
+
 	private $redis = null;
 	private $config = '';
+
 	public function __construct($config) {
 		if (!class_exists('Redis')) {
 			return false;
@@ -52,7 +69,7 @@ class redis_cache {
 		}
 
 		if ($value !== false && is_string($value)) {
-			$value = get_object_vars(json_decode($value));
+			$value = json_decode($value, true);
 		}
 
 		return $value;	

@@ -13,6 +13,7 @@
  */
 namespace Suara\Libs\Routing;
 use Suara\Libs\Http\Request as Request;
+use Suara\Libs\Routing\Router as Router;
 
 //路由器模式
 // $router = [
@@ -25,12 +26,7 @@ use Suara\Libs\Http\Request as Request;
 class Dispatcher {
 
 	public function dispatch(Request $request) {
-		
-
-
 		$controller = $this->_getController($request);
-
-		
 	}
 
 	protected function _getController($request) {
