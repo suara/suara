@@ -18,7 +18,7 @@ use Suara;
  * @see http://blog.wolftankk.com/2013/04/28/php-routing-part-1-request/
  * Request is a http base module.
  *
- * Request include header, GET, POST, FILE etc..
+ * Request includes header, GET, POST, FILE etc..
  *
  * Request *ONLY* get a value
  * Respone *ONLY* set a value
@@ -66,7 +66,6 @@ class Request {
 		$this->url = $url;
 
 		if ($parseEnvironment) {
-			//process
 		}
 
 		//current address

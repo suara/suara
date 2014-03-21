@@ -15,17 +15,13 @@ namespace Suara\Libs\Routing;
 use Suara\Libs\Http\Request as Request;
 use Suara\Libs\Routing\Router as Router;
 
-//路由器模式
-// $router = [
-//   '/' => [controller, action, addtionsParams]
-//   '/:controller/'
-//   '/v1/:controller/:action'
-//
-// ]
-
 class Dispatcher {
 
+
 	public function dispatch(Request $request) {
+
+		Router::parse($request->url);
+
 		$controller = $this->_getController($request);
 	}
 
