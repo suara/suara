@@ -1,4 +1,4 @@
-<?
+<?php
 /**
  * Suara Bootstrap (http://suaraphp.com)
  *
