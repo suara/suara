@@ -15,7 +15,6 @@ namespace Suara\Libs\Cache\Engine;
 use Suara\Libs\Cache\CacheEngine;
 
 class RedisEngine {
-
 	private $redis = null;
 	private $config = '';
 

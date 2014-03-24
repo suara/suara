@@ -1,5 +1,6 @@
 <?php
-class memcache_cache {
+namespace Suara\Libs\Cache\Engine;
+class MemcacheEngine {
 	private $memcache = null;
 	private $config = '';
 	public function __construct($config) {

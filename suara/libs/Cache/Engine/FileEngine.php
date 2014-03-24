@@ -1,8 +1,8 @@
 <?php
 namespace Suara\Libs\Cache\Engine;
-use Suara\Libs\Cache\SuaraEngine;
+use Suara\Libs\Cache\CacheEngine;
 
-class FileEngine extends SuaraEngine {
+class FileEngine extends CacheEngine {
 	protected $_setting = array(
 		'suffix' => '.cache',
 		'type'   => 'array' // array serialize null(string)

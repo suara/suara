@@ -1,5 +1,8 @@
 <?php
-class apc_cache() {
+namespace Suara\Libs\Cache\Engine;
+
+class ApcEngine {
 
 }
+
 ?>
