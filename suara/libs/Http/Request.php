@@ -130,6 +130,11 @@ class Request {
 		return preg_match ( '/[\d\.]{7,15}/', $ip, $matches ) ? $matches [0] : '';
 	}
 
+	public function addParams($params) {
+		$this->params = array_merge($this->params, (array)$params);
+		return $this;
+	}
+
 	public function referer() {
 
 	}

@@ -20,8 +20,9 @@ class Dispatcher {
 
 	public function dispatch(Request $request) {
 
-		Router::parse($request->url);
-
+		$params = Router::parse($request->url);
+		$request->addParams($params);
+		
 		$controller = $this->_getController($request);
 	}
 
@@ -46,11 +47,12 @@ class Dispatcher {
 		
 		if ($controller) {
 			$class = $controller . "Controller";
-			#use Suara\Libs\Controller\
-			
-			if (class_exists($class)) {
-				return $class;
-			}
+			echo $class;
+			//#use Suara\Libs\Controller\
+			//
+			//if (class_exists($class)) {
+			//	return $class;
+			//}
 		}
 	}
 }

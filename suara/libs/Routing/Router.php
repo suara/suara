@@ -13,6 +13,8 @@
  */
 namespace Suara\Libs\Routing;
 
+use Suara\Libs\Routing\Routes as Routes;
+
 //路由器模式
 // $router = [
 //   '/' => [controller, action, addtionsParams]
@@ -30,6 +32,7 @@ class Router {
 
 	public static $initialized = false;
 
+	private static $_routeClass = 'Route';
 
 	/**
 	 * 增加一个路由规则
@@ -45,9 +48,14 @@ class Router {
 			$defaults += ['action' => 'init'];
 		}
 
-		print_r($defaults);
-		
-		//self::$routes[] = new xx();
+		$routeClass = self::$_routeClass;
+
+		if (isset($options['routeClass'])) {
+
+		}
+
+		$routeClass = __NAMESPACE__."\\Routes\\".$routeClass;
+		self::$routes[] = new $routeClass($route, $defaults, $options);
 
 		return self::$routes;
 	}
@@ -71,7 +79,17 @@ class Router {
 		}
 
 		//parse url
+		for ($i = 0, $len = count(self::$routes); $i < $len; $i++) {
+			$route =& self::$routes[$i];
 
+			if ($r = $route->parse($url)) {
+				$output = $r;
+
+				break;
+			}
+		}
+
+		return $output;
 	}
 
 	/**
