@@ -12,6 +12,6 @@ interface IViewRenderer {
 	 * @param string $template 需要调用的模板
 	 * @param string $options 参数配置
 	 */
-	public static function render($module, $template, $options = array());
+	public function render($module, $template, $options = array());
 }
 ?>

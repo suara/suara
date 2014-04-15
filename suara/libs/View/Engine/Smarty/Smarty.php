@@ -30,7 +30,6 @@
  * @package Smarty
  * @version 3.1.12
  */
-
 /**
  * define shorthand directory separator constant
  */

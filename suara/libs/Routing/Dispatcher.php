@@ -30,11 +30,20 @@ class Dispatcher {
 
 		//controller 调用$action
 		$response = $this->_invoke($controller, $request, $response);
+		
+		if (isset($request->params['return'])) {
+			return $response->body();
+		}
+
+		//输出
+		$response->send();
 	}
 
 	public function _invoke(Controller $controller, Request $request, Response $response) {
-
 		$controller->invodeAction($request);
+
+
+		return $response;
 	}
 
 	public function parseParams($request) {

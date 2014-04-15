@@ -32,7 +32,9 @@ class Request {
 
 	public $params = [
 		'controller' => null,
-		'action'     => null
+		'action'     => null,
+		'named'      => [],
+		'pass'       => []
 	];
 
 	/**
@@ -50,12 +52,6 @@ class Request {
 	];
 
 	public function __construct($url = null, $parseEnvironment = true) {
-		//if(!get_magic_quotes_gpc()) {
-		//	$_GET = Suara\new_addslashes($_GET);
-		//	$_POST = Suara\new_addslashes($_POST);
-		//	$_REQUEST = Suara\new_addslashes($_REQUEST);
-		//	$_COOKIE = Suara\new_addslashes($_COOKIE);
-		//}
 		$this->_base();
 		if (!$url) {
 			$url = $this->_url();
@@ -66,6 +62,12 @@ class Request {
 		$this->url = $url;
 
 		if ($parseEnvironment) {
+			if(!get_magic_quotes_gpc()) {
+				$_GET = Suara\new_addslashes($_GET);
+				$_POST = Suara\new_addslashes($_POST);
+				$_REQUEST = Suara\new_addslashes($_REQUEST);
+				$_COOKIE = Suara\new_addslashes($_COOKIE);
+			}
 		}
 
 		//current address
