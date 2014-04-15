@@ -13,29 +13,46 @@
  */
 namespace Suara\Libs\Routing;
 use Suara\Libs\Http\Request as Request;
+use Suara\Libs\Http\Response as Response;
 use Suara\Libs\Routing\Router as Router;
+use Suara\Libs\Controller\Controller as Controller;
 
 class Dispatcher {
 
+	public function dispatch(Request $request, Response $response) {
+		$this->parseParams($request);
 
-	public function dispatch(Request $request) {
-
-		$params = Router::parse($request->url);
-		$request->addParams($params);
+		$controller = $this->_getController($request, $response);
 		
-		$controller = $this->_getController($request);
+		if (!($controller instanceof Controller)) {
+			//throw exception
+		}
+
+		//controller 调用$action
+		$response = $this->_invoke($controller, $request, $response);
 	}
 
-	protected function _getController($request) {
+	public function _invoke(Controller $controller, Request $request, Response $response) {
+
+		$controller->invodeAction($request);
+	}
+
+	public function parseParams($request) {
+		//Router::setRuquestInfo($request);
+		$params = Router::parse($request->url);
+		$request->addParams($params);
+	}
+
+	protected function _getController($request, $response) {
 		$className = $this->_loadController($request);
 		if (!$className) {
 			return false;
 		}
-		$reflection = new ReflectionClass($className);
+		$reflection = new \ReflectionClass($className);
 		if ($reflection->isAbstract() || $reflection->isInterface()) {
 			return false;
 		} else {
-			return $reflection->newInstance($request);
+			return $reflection->newInstance($request, $response);
 		}
 	}
 
@@ -47,13 +64,15 @@ class Dispatcher {
 		
 		if ($controller) {
 			$class = $controller . "Controller";
-			echo $class;
-			//#use Suara\Libs\Controller\
-			//
-			//if (class_exists($class)) {
-			//	return $class;
-			//}
+
+			$class = "Suara\\Apps\\Controllers\\$class";
+
+			if (class_exists($class)) {
+				return $class;
+			}
 		}
+
+		return false;
 	}
 }
 

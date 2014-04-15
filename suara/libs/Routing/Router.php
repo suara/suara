@@ -34,15 +34,24 @@ class Router {
 
 	private static $_routeClass = 'Route';
 
+	private static $_requests = [];
+
+	private static $_namedConfig = [
+		'default' => ['page', 'fields', 'order', 'limit', 'sort', 'direction', 'setup'],
+		'greedyNamed' => true,
+		'separator' => ':',
+		'rules' => false
+
+	];
+
 	/**
 	 * 增加一个路由规则
 	 *
-	 * 最标准的模式是 /:controller/:action/*
-	 * /:controller/:action/:date/:id.html    array('date' => '[0-9]{4}-[0-9]{2}-[0-9]{2}', 'id' => '[0-9]+')
-	 * prefix
 	 */
 	public static function add($route, $defaults = array(), $options = array()) {
 		self::$initialized = true;
+
+		//prefix
 
 		if (empty($defaults['action'])) {
 			$defaults += ['action' => 'init'];
@@ -56,7 +65,6 @@ class Router {
 
 		$routeClass = __NAMESPACE__."\\Routes\\".$routeClass;
 		self::$routes[] = new $routeClass($route, $defaults, $options);
-
 		return self::$routes;
 	}
 
@@ -78,25 +86,38 @@ class Router {
 			parse_str($queryParams, $queryParams);
 		}
 
+		//parse extension url
+
 		//parse url
 		for ($i = 0, $len = count(self::$routes); $i < $len; $i++) {
 			$route =& self::$routes[$i];
 
 			if ($r = $route->parse($url)) {
+				//self::$_currentRoute[] =& $route;
 				$output = $r;
-
 				break;
 			}
 		}
 
+		if (!empty($queryParams) && !isset($output['?'])) {
+			$output['?'] = $queryParams;
+		}
+
 		return $output;
+	}
+
+	public static function setRequestInfo($request) {
+
+	}
+
+	public static function url() {
+
 	}
 
 	/**
 	 * load app Route config
 	 */
 	protected static function loadRouteConfigs() {
-		//load config
 		self::$initialized = true;
 		include APP_CONFIG_PATH . 'routers.php';
 	}

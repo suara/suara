@@ -41,73 +41,6 @@ class Route {
 		return $this->_compiledRoute;
 	}
 
-	public function parse($url) {
-		if (!$this->compiled()) {
-			$this->compile();
-		}
-
-		if (!preg_match($this->_compiledRoute, urldecode($url), $route)) {
-			return false;
-		}	
-
-		foreach ($this->defaults as $key => $value) {
-			$key = (string) $key;
-			if ($key[0] === '[' && preg_match('#^\[(\w+)\]$#', $key, $header)) {
-				if (isset($this->_headerMap[$header[1]])) {
-					$header = $this->_headerMap[$header[1]];
-				} else {
-					$header = 'http_' . $header[1];
-				}
-
-				$header = strtoupper($header);
-
-				$value = (array)$value;
-				$isMatched = false;
-
-				foreach ($value as $v) {
-					if (\Suara\env($header) === $v) {
-						$isMatched = true;
-					}
-				}
-
-				if (!$isMatched) {
-					return false;
-				}
-			}
-		}
-
-		array_shift($route);
-		$count = count($this->keys);
-		for ($i = 0; $i <= $count; $i++) {
-			//移除 0 1 2
-			unset($route[$i]);
-		}
-		$route['pass'] = $route['named'] = array();
-
-		foreach ($this->defaults as $key => $val) {
-			if (isset($route[$key])) {
-				continue;
-			}
-			if (is_numeric($key)) {
-				$route['pass'][] = $val;
-				continue;
-			}
-
-			$route[$key] = $val;
-		}
-
-		if (isset($route['_args_'])) {
-			//list($pass, $named) = $this->_parseArgs();
-		}
-
-		if (isset($route['_tailing_'])) {
-			$route['pass'][] = $route['_tailing_'];
-			unset($route['_tailing_']);
-		}
-
-		return $route;
-	}
-
 	private function _writeRoute() {
 		if (empty($this->template) || $this->template == '/') {
 			$this->_compiledRoute = '#^/*$#';
@@ -164,5 +97,96 @@ class Route {
 		sort($keys);
 		$this->keys = array_reverse($keys);
 	}
+
+	public function parse($url) {
+		if (!$this->compiled()) {
+			$this->compile();
+		}
+
+		if (!preg_match($this->_compiledRoute, urldecode($url), $route)) {
+			return false;
+		}	
+
+		foreach ($this->defaults as $key => $value) {
+			$key = (string) $key;
+			if ($key[0] === '[' && preg_match('#^\[(\w+)\]$#', $key, $header)) {
+				if (isset($this->_headerMap[$header[1]])) {
+					$header = $this->_headerMap[$header[1]];
+				} else {
+					$header = 'http_' . $header[1];
+				}
+
+				$header = strtoupper($header);
+
+				$value = (array)$value;
+				$isMatched = false;
+
+				foreach ($value as $v) {
+					if (\Suara\env($header) === $v) {
+						$isMatched = true;
+					}
+				}
+
+				if (!$isMatched) {
+					return false;
+				}
+			}
+		}
+
+		array_shift($route);
+		$count = count($this->keys);
+		for ($i = 0; $i <= $count; $i++) {
+			//移除 0 1 2
+			unset($route[$i]);
+		}
+		$route['pass'] = $route['named'] = array();
+
+		foreach ($this->defaults as $key => $val) {
+			if (isset($route[$key])) {
+				continue;
+			}
+			if (is_numeric($key)) {
+				$route['pass'][] = $val;
+				continue;
+			}
+
+			$route[$key] = $val;
+		}
+
+		if (isset($route['_args_'])) {
+			//list($pass, $named) = $this->_parseArgs($route['_args_'], $route);
+		}
+
+		if (isset($route['_tailing_'])) {
+			$route['pass'][] = $route['_tailing_'];
+			unset($route['_tailing_']);
+		}
+
+		//调整pass参数的位置
+		if (isset($this->options['pass'])) {
+			$j = count($this->options['pass']);
+			while ($j--) {
+				if (isset($route[$this->options['pass'][$j]])) {
+					array_unshift($route['pass'], $route[$this->options['pass'][$j]]);
+				}
+			}
+		}
+
+		return $route;
+	}
+
+	/**
+	 * 这里主要用于比如分页
+	 * /news/content/12/page:2
+	 * 这里是一个特殊的处理模式，所以需要配置named greedy
+	 */
+	//private function _parseArgs($args, $context) {
+	//	$pass = $named = [];
+	//	$args = explode('/', $args);
+
+	//	foreach ($args as $param) {
+
+	//	}
+	//}
 }
 ?>
