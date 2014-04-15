@@ -85,6 +85,13 @@ class Request {
 
 	}
 
+	public function __get($key) {
+		if (isset($this->params[$key])) {
+			return $this->params[$key];
+		}
+		return null;
+	}
+
 	/**
 	 * Absolute url path
 	 */

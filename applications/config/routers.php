@@ -12,7 +12,8 @@ use Suara\Libs\Routing\Router;
 
 Router::add('/', ['controller' => 'index', 'action' => 'home']);
 Router::add('/api/:controller/:action');
-Router::add('/news/:id.html', ['controller'=> 'new', 'action' => 'content'], ['id' => '[0-9]+']);
+Router::add('/news/:id.html', ['controller'=> 'news', 'action' => 'content'], ['id' => '[0-9]+']);
+Router::add('/news/:newpath/:id', ['controller'=> 'news', 'action' => 'content'], ['newpath' => '[0-9]{4}-[0-9]{2}-[0-9]{2}', 'id' => '[0-9]+']);
 Router::add('/user/**', ['controller'=> 'user']);
 Router::add('/users/*', ['controller'=> 'user']);
 Router::add('/api/user/account', ['controller' => 'user', 'action' => 'account', '[method]' => 'GET']);
