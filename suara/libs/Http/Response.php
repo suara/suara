@@ -4,7 +4,7 @@
  *
  */
 namespace Suara\Libs\Http;
-
+use Suara\Libs\Core\Configure;
 
 class Response {
 
@@ -305,7 +305,7 @@ class Response {
 		}
 
 		if (!isset($options['charset'])) {
-			//$options['charset'] = Configure::read('system', 'charset');
+			$options['charset'] = Configure::read('system', 'charset');
 		}
 
 		//$this->charset($options['charset']);
