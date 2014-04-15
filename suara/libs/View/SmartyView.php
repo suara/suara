@@ -1,6 +1,8 @@
 <?php
 namespace Suara\Libs\View;
 
+use Suara\Libs\Controller\Controller;
+
 use Suara\Libs\View\IViewRenderer as IViewRenderer;
 
 class SmartyView implements IViewRenderer {
@@ -33,11 +35,14 @@ class SmartyView implements IViewRenderer {
 
 	public $layoutCachePath = null;
 
-	public function __construct() {
+	public function __construct(Controller $controller) {
 		if ($this->view == null) {
 			include __DIR__.DIRECTORY_SEPARATOR."Engine/Smarty/Smarty.php";
 			$this->view = new \Smarty();
 		}
+
+		$this->request = $controller->request;
+		$this->response = $controller->response;
 
 		//define('ASSET_COMPILE_OUTPUT_DIR', CACHE_PATH.'asset_cache');
 		//define('ASSET_COMPILE_URL_ROOT', '/caches/asset_cache');

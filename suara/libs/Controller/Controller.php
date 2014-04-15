@@ -3,8 +3,6 @@ namespace Suara\Libs\Controller;
 use Suara\Libs\Http\Request as Request;
 use Suara\Libs\Http\Response as Response;
 
-use Suara\Libs\View\SmartyView as SmartyView;
-
 class Controller {
 	public $name = null;
 
@@ -12,9 +10,13 @@ class Controller {
 
 	public $request = null;
 
+	public $response = null;
+
 	public $viewVars = [];
 
 	public $view = null;
+
+	public $viewClass = 'SmartyView';
 
 	public function __construct($request = null, $response = null) {
 		if ($this->name === null) {
@@ -66,7 +68,8 @@ class Controller {
 	 * 页面最终输出
 	 */
 	public function render() {
-		$this->view = new SmartyView;
+		$class = 'Suara\\Libs\\View\\'.$this->viewClass;
+		$this->view = new $class($this);
 		//$this->view->render();
 	}
 }

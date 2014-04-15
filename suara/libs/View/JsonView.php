@@ -10,7 +10,7 @@ class JsonView implements IViewRenderer {
 		$controller->response->type('json');
 	}
 
-	public function render($view = null, $layout = null) {
+	public function render($view = null, $layout = null, $options = null) {
 		$return = null;
 
 		if (is_array($this->viewVars['data'])) {
