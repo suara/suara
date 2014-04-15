@@ -26,11 +26,11 @@ class Controller {
 			$this->setRequest($request);
 		}
 
-		if ($response instanceof Response) {
-
-		}
+		//if ($response instanceof Response) {
+		//}
 	}
 
+	//调用实际方法
 	public function invodeAction(Request $request) {
 		try {
 			$method = new \ReflectionMethod($this, $request->params['action']);
@@ -51,6 +51,10 @@ class Controller {
 
 	public function setRequest(Request $request) {
 		$this->request = $request;
+	}
+
+	public function setResponse(Response $response) {
+
 	}
 }
 

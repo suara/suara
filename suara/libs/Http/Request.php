@@ -142,6 +142,10 @@ class Request {
 		return $this;
 	}
 
+	public function addPaths($paths) {
+
+	}
+
 	public function referer() {
 
 	}
@@ -150,8 +154,16 @@ class Request {
 
 	}
 
-	public function host() {
+	public function method() {
+		return Suara\env('REQUEST_METHOD');
+	}
 
+	public function host($trustProxy = false) {
+		if ($trustProxy) {
+			return Suara\env('HTTP_X_FORWARDED_HOST');
+		}
+
+		return Suara\env('HTTP_HOST');
 	}
 
 	public function processGET() {
@@ -164,6 +176,17 @@ class Request {
 
 	public function processFILE() {
 
+	}
+
+	public function param($key) {
+		if (isset($this->params[$key])) {
+			return $this->params[$key];
+		}
+		return null;
+	}
+
+	public function onlyAllow($methods) {
+		
 	}
 
 	private function _readInput() {
