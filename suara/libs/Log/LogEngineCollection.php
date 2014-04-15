@@ -3,6 +3,7 @@ namespace Suara\Libs\Log;
 use Suara\Libs\Log\ILogStream;
 
 class LogEngineCollection {
+
 	public function load($name, $options = array()) {
 		$enable = isset($options['enabled']) ? $options['enabled'] : true;
 		$loggerName = $options['engine'];
@@ -19,6 +20,7 @@ class LogEngineCollection {
 		}
 		return $logger;
 	}
+
 	protected static function _getLogger($loggerName) {
 		if (substr($loggerName, -3) !== "Log") {
 			$loggerName .= "Log";

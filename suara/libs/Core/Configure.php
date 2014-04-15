@@ -51,8 +51,6 @@ class Configure {
 			 */
 			self::_setErrorHandlers($error, $exception);
 
-			trigger_error(11, E_ERROR);
-
 			//重置
 			restore_error_handler();
 

@@ -37,8 +37,6 @@ class Controller {
 		if ($response instanceof Response) {
 			$this->response = $response;
 		}
-
-		$this->render();
 	}
 
 	//调用实际方法
@@ -70,7 +68,6 @@ class Controller {
 	public function render() {
 		$class = 'Suara\\Libs\\View\\'.$this->viewClass;
 		$this->view = new $class($this);
-		//$this->view->render();
 	}
 }
 
