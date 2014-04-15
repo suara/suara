@@ -1,22 +1,44 @@
 <?php
 namespace Suara\Libs\Controller;
 use Suara\Libs\Http\Request as Request;
+use Suara\Libs\Http\Response as Response;
 
 class Controller {
-	public function __construct($request = null, $response = null) {
+	public $name = null;
 
+	public $methods = [];
+
+	public $request = null;
+
+	public function __construct($request = null, $response = null) {
+		if ($this->name === null) {
+			$currentClassName = explode('\\', get_class($this));
+			$currentClassName = array_pop($currentClassName);
+			$this->name = substr($currentClassName, 0, -10);
+		}
+
+		$childrenMethods = get_class_methods($this);
+		$parentMethods = get_class_methods(__CLASS__);
+
+		$this->methods = array_diff($childrenMethods, $parentMethods);
+
+		if ($request instanceof Request) {
+			$this->setRequest($request);
+		}
+
+		if ($response instanceof Response) {
+
+		}
 	}
 
 	public function invodeAction(Request $request) {
 		try {
 			$method = new \ReflectionMethod($this, $request->params['action']);
 			if ($this->isPrivateAction($method, $request)) {
-				//throw 
 			}
 
 			return $method->invokeArgs($this, $request->params['pass']);
 		} catch (\ReflectionException $e) {
-			//$e
 		}
 	}
 
@@ -25,6 +47,10 @@ class Controller {
 
 
 		return $privateAction;
+	}
+
+	public function setRequest(Request $request) {
+		$this->request = $request;
 	}
 }
 
