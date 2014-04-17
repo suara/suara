@@ -13,6 +13,7 @@
  */
 namespace Suara\Libs\Http;
 use Suara;
+use Suara\Libs\Core\Configure;
 
 /**
  * @see http://blog.wolftankk.com/2013/04/28/php-routing-part-1-request/
@@ -36,6 +37,10 @@ class Request {
 		'named'      => [],
 		'pass'       => []
 	];
+
+	public $query = [];
+
+	protected $_input = '';
 
 	/**
 	 * 通过指定的环境变量来匹配是否复合所对应的值。
@@ -62,17 +67,30 @@ class Request {
 		$this->url = $url;
 
 		if ($parseEnvironment) {
-			if(!get_magic_quotes_gpc()) {
-				$_GET = Suara\new_addslashes($_GET);
-				$_POST = Suara\new_addslashes($_POST);
-				$_REQUEST = Suara\new_addslashes($_REQUEST);
-				$_COOKIE = Suara\new_addslashes($_COOKIE);
-			}
+			//if(!get_magic_quotes_gpc()) {
+			//	$_GET = Suara\new_addslashes($_GET);
+			//	$_POST = Suara\new_addslashes($_POST);
+			//	$_REQUEST = Suara\new_addslashes($_REQUEST);
+			//	$_COOKIE = Suara\new_addslashes($_COOKIE);
+			//}
+
+			$this->processGET();
 		}
 
 		//current address
 		//$this->here = $this->base . $this->url;
 	}
+
+	/**
+	 * 获取当前页面完整URL地址
+	 */
+	//function get_url() {
+	//	$sys_protocal = isset($_SERVER['SERVER_PORT']) && $_SERVER['SERVER_PORT'] == '443' ? 'https://' : 'http://';
+	//	$php_self = $_SERVER['PHP_SELF'] ? safe_replace($_SERVER['PHP_SELF']) : safe_replace($_SERVER['SCRIPT_NAME']);
+	//	$path_info = isset($_SERVER['PATH_INFO']) ? safe_replace($_SERVER['PATH_INFO']) : '';
+	//	$relate_url = isset($_SERVER['REQUEST_URI']) ? safe_replace($_SERVER['REQUEST_URI']) : $php_self.(isset($_SERVER['QUERY_STRING']) ? '?'.safe_replace($_SERVER['QUERY_STRING']) : $path_info);
+	//	return $sys_protocal.(isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : '').$relate_url;
+	//}
 
 	/**
 	 * 返回一个基础URL。
@@ -84,7 +102,6 @@ class Request {
 	 * @return string 
 	 */
 	private function _base() {
-
 	}
 
 	public function __get($key) {
@@ -169,6 +186,9 @@ class Request {
 	}
 
 	public function processGET() {
+		if(!get_magic_quotes_gpc()) {
+			$_GET = Suara\new_addslashes($_GET);
+		}
 
 	}
 

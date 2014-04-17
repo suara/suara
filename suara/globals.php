@@ -1,6 +1,8 @@
 <?php
 namespace Suara;
 
+use Suara\Libs\Core\Configure;
+
 /**
  * 返回经addslashes处理过的字符串或数组
  * @param $string 需要处理的字符串或数组
@@ -87,17 +89,6 @@ function fileext($filename) {
 }
 
 /**
- * 获取当前页面完整URL地址
- */
-function get_url() {
-	$sys_protocal = isset($_SERVER['SERVER_PORT']) && $_SERVER['SERVER_PORT'] == '443' ? 'https://' : 'http://';
-	$php_self = $_SERVER['PHP_SELF'] ? safe_replace($_SERVER['PHP_SELF']) : safe_replace($_SERVER['SCRIPT_NAME']);
-	$path_info = isset($_SERVER['PATH_INFO']) ? safe_replace($_SERVER['PATH_INFO']) : '';
-	$relate_url = isset($_SERVER['REQUEST_URI']) ? safe_replace($_SERVER['REQUEST_URI']) : $php_self.(isset($_SERVER['QUERY_STRING']) ? '?'.safe_replace($_SERVER['QUERY_STRING']) : $path_info);
-	return $sys_protocal.(isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : '').$relate_url;
-}
-
-/**
  * 字符截取 支持UTF8/GBK
  * @param $string
  * @param $length
@@ -111,7 +102,7 @@ function str_cut($string, $length, $dot = '...') {
 	if (defined('CHARSET')) {
 		$charset = CHARSET;
 	} else {
-		$charset = s_core::load_config('system', 'charset');
+		$charset = Configure::read('system', 'charset');
 	}
 	if(strtolower($charset) == 'utf-8') {
 		$length = intval($length-strlen($dot)-$length/3);
@@ -159,24 +150,6 @@ function str_cut($string, $length, $dot = '...') {
 		}
 	}
 	return $strcut.$dot;
-}
-
-/**
- * 获取请求ip
- *
- * @return ip地址
- */
-function ip() {
-	if(env('HTTP_CLIENT_IP') && strcasecmp(env('HTTP_CLIENT_IP'), 'unknown')) {
-		$ip = env('HTTP_CLIENT_IP');
-	} elseif(env('HTTP_X_FORWARDED_FOR') && strcasecmp(env('HTTP_X_FORWARDED_FOR'), 'unknown')) {
-		$ip = env('HTTP_X_FORWARDED_FOR');
-	} elseif(env('REMOTE_ADDR') && strcasecmp(env('REMOTE_ADDR'), 'unknown')) {
-		$ip = env('REMOTE_ADDR');
-	} elseif(env('REMOTE_ADDR') && strcasecmp(env('REMOTE_ADDR'), 'unknown')) {
-		$ip = env('REMOTE_ADDR');
-	}
-	return preg_match ( '/[\d\.]{7,15}/', $ip, $matches ) ? $matches [0] : '';
 }
 
 /**
@@ -269,57 +242,54 @@ function env($key) {
 	return null;
 }
 
-
-
-
 /**
  * Cache
  */
 function setcache($name, $data, $filepath = '', $type = 'file', $config='', $timeout=30) {
-	s_core::load_sys_class('cache_factory', '', 0);
-	if ($config) {
-		$cacheconfig = s_core::load_config('cache');
-		$cache = cache_factory::get_instance($cacheconfig)->get_cache($config);
-	} else {
-		$cache = cache_factory::get_instance()->get_cache($type);
-	}
+	//s_core::load_sys_class('cache_factory', '', 0);
+	//if ($config) {
+	//	$cacheconfig = s_core::load_config('cache');
+	//	$cache = cache_factory::get_instance($cacheconfig)->get_cache($config);
+	//} else {
+	//	$cache = cache_factory::get_instance()->get_cache($type);
+	//}
 
-	//clear 
-	return $cache->set($name, $data, $timeout, '', $filepath);
+	////clear 
+	//return $cache->set($name, $data, $timeout, '', $filepath);
 }
 
 function getcache($name, $filepath='', $type='file', $config='') {
-	s_core::load_sys_class('cache_factory', '', 0);
-	if ($config) {
-		$cacheconfig = s_core::load_config('cache');
-		$cache = cache_factory::get_instance($cacheconfig)->get_cache($config);
-	} else {
-		$cache = cache_factory::get_instance()->get_cache($type);
-	}
+	//s_core::load_sys_class('cache_factory', '', 0);
+	//if ($config) {
+	//	$cacheconfig = s_core::load_config('cache');
+	//	$cache = cache_factory::get_instance($cacheconfig)->get_cache($config);
+	//} else {
+	//	$cache = cache_factory::get_instance()->get_cache($type);
+	//}
 
-	return $cache->get($name, '', $filepath);
+	//return $cache->get($name, '', $filepath);
 }
 
 function delcache($name, $filepath='', $type='file', $config='') {
-	s_core::load_sys_class('cache_factory', '', 0);
-	if ($config) {
-		$cacheconfig = s_core::load_config('cache');
-		$cache = cache_factory::get_instance($cacheconfig)->get_cache($config);
-	} else {
-		$cache = cache_factory::get_instance()->get_cache($type);
-	}
-	return $cache->delete($name, '', '', $filepath);
+	//s_core::load_sys_class('cache_factory', '', 0);
+	//if ($config) {
+	//	$cacheconfig = s_core::load_config('cache');
+	//	$cache = cache_factory::get_instance($cacheconfig)->get_cache($config);
+	//} else {
+	//	$cache = cache_factory::get_instance()->get_cache($type);
+	//}
+	//return $cache->delete($name, '', '', $filepath);
 }
 
 function getcacheinfo($name, $filepath ='', $type='file', $config='') {
-	s_core::load_sys_class('cache_factory', '', 0);
-	if ($config) {
-		$cacheconfig = s_core::load_config('cache');
-		$cache = cache_factory::get_instance($cacheconfig)->get_cache($config);
-	} else {
-		$cache = cache_factory::get_instance()->get_cache($config);
-	}
-	return $cache->cacheinfo($name, '', '', $filepath);
+	//s_core::load_sys_class('cache_factory', '', 0);
+	//if ($config) {
+	//	$cacheconfig = s_core::load_config('cache');
+	//	$cache = cache_factory::get_instance($cacheconfig)->get_cache($config);
+	//} else {
+	//	$cache = cache_factory::get_instance()->get_cache($config);
+	//}
+	//return $cache->cacheinfo($name, '', '', $filepath);
 }
 
 
@@ -354,29 +324,5 @@ function array2string($data, $isformdata = 1) {
  */
 function create_randomstr($lenth = 4) {
 	return random($lenth, '123456789abcdefghijklmnpqrstuvwxyzABCDEFGHIJKLMNPQRSTUVWXYZ');
-}
-
-/**
- * iconv 编辑转换
- */
-if (!function_exists('iconv')) {
-	function iconv($in_charset, $out_charset, $str) {
-		$in_charset = strtoupper($in_charset);
-		$out_charset = strtoupper($out_charset);
-		if (function_exists('mb_convert_encoding')) {
-			return mb_convert_encoding($str, $out_charset, $in_charset);
-		} else {
-			s_core::load_sys_func('iconv');
-			$in_charset = strtoupper($in_charset);
-			$out_charset = strtoupper($out_charset);
-			if ($in_charset == 'UTF-8' && ($out_charset == 'GBK' || $out_charset == 'GB2312')) {
-				return utf8_to_gbk($str);
-			}
-			if (($in_charset == 'GBK' || $in_charset == 'GB2312') && $out_charset == 'UTF-8') {
-				return gbk_to_utf8($str);
-			}
-			return $str;
-		}
-	}
 }
 ?>

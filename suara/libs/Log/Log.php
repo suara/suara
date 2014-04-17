@@ -82,7 +82,9 @@ class Log {
 	 * ### 使用方法:
 	 */
 	public static function write($type, $message, $scope = array()) {
-
+		//if (empty(self::$_Collection)) {
+		//	self::_init();
+		//}
 	}
 
 	public static function emergency($message, $scope = array()) {

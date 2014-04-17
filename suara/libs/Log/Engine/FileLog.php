@@ -24,12 +24,26 @@ class FileLog implements ILogStream {
 	}
 
 	public function write($type, $message) {
-		echo $type, $message;
+		$output = date("Y-m-d H:i:s") . " ". $type . " >".$message;
+		$filename = $this->_getFilename($type);
+
+
 	}
 
 	private function _getFilename($type) {
-		$debugTypes = array('notice', 'info', 'debug');
+		$debugTypes = ['notice', 'info', 'debug'];
+		
+		if (!empty($this->_file)) {
+			$filename = $this->_file;
+		} elseif ($type == 'error' || $type == 'warning') {
+			$filename = 'error.log';
+		} elseif (in_array($type, $debugTypes)) {
+			$filename = 'debug.log';
+		} else {
+			$filename = "{$type}.log";
+		}
 
+		return $filename;
 	}
 }
 ?>

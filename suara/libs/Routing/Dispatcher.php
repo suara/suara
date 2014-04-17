@@ -17,15 +17,17 @@ use Suara\Libs\Http\Response as Response;
 use Suara\Libs\Routing\Router as Router;
 use Suara\Libs\Controller\Controller as Controller;
 
-class Dispatcher {
+use Suara\Libs\Error\MissingControllerException;
 
+class Dispatcher {
 	public function dispatch(Request $request, Response $response) {
 		$this->parseParams($request);
 
 		$controller = $this->_getController($request, $response);
-		
+
 		if (!($controller instanceof Controller)) {
-			//throw exception
+			throw new MissingControllerException("{$controller} is not exists");
+			exit;
 		}
 
 		//controller 调用$action

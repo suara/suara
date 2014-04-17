@@ -17,4 +17,7 @@ Router::add('/news/:newpath/:id', ['controller'=> 'news', 'action' => 'content']
 Router::add('/user/**', ['controller'=> 'user']);
 Router::add('/users/*', ['controller'=> 'user']);
 Router::add('/api/user/account', ['controller' => 'user', 'action' => 'account', '[method]' => 'GET']);
+
+
+//Router::redirect("/cfpl", 'http://cf.tga.plu.cn/cfpl', ['status' => 302]);
 ?>

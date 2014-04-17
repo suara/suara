@@ -43,7 +43,7 @@ class Controller {
 	public function invodeAction(Request $request) {
 		try {
 			$method = new \ReflectionMethod($this, $request->params['action']);
-			if ($this->isPrivateAction($method, $request)) {
+			if ($this->_isPrivateAction($method, $request)) {
 			}
 
 			return $method->invokeArgs($this, $request->params['pass']);
@@ -51,7 +51,7 @@ class Controller {
 		}
 	}
 
-	private function isPrivateAction(\ReflectionMethod $method, Request $request) {
+	private function _isPrivateAction(\ReflectionMethod $method, Request $request) {
 		$privateAction = ($method->name[0] === '_' || !$method->isPublic());
 
 

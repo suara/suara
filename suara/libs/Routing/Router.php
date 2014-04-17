@@ -68,6 +68,15 @@ class Router {
 		return self::$routes;
 	}
 
+	public static function redirect($route, $url, $options = []) {
+		$options['routeClass'] = 'RedirectRoute';
+		if (is_string($url)) {
+			$url = ['redirect' => $url];
+		}
+
+		return self::add($route, $url, $options);
+	}
+
 	public static function parse($url) {
 		if (!self::$initialized) {
 			self::loadRouteConfigs();
