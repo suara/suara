@@ -153,10 +153,12 @@ class Route {
 			$route[$key] = $val;
 		}
 
+		// *
 		if (isset($route['_args_'])) {
 			//list($pass, $named) = $this->_parseArgs($route['_args_'], $route);
 		}
 
+		// **
 		if (isset($route['_tailing_'])) {
 			$route['pass'][] = $route['_tailing_'];
 			unset($route['_tailing_']);

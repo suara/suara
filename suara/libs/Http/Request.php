@@ -10,24 +10,18 @@
  * @package       Suara.Libs.Http
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  * @author        wolftankk@gmail.com		  
+ * @see http://blog.wolftankk.com/2013/04/28/php-routing-part-1-request/
  */
 namespace Suara\Libs\Http;
+
 use Suara;
+use Suara\Libs\Http\HttpHeaders;
 use Suara\Libs\Core\Configure;
 
-/**
- * @see http://blog.wolftankk.com/2013/04/28/php-routing-part-1-request/
- * Request is a http base module.
- *
- * Request includes header, GET, POST, FILE etc..
- *
- * Request *ONLY* get a value
- * Respone *ONLY* set a value
- */
 class Request {
 	public $base = false;
 
-	public $url = false;
+	public $uri = false;
 
 	public $here = null;
 
@@ -40,81 +34,36 @@ class Request {
 
 	public $query = [];
 
-	protected $_input = '';
+	public $data  = [];
 
-	/**
-	 * 通过指定的环境变量来匹配是否复合所对应的值。
-	 * 在http行为上一般包含有 get, post, put, delete, head, options 除了前两个是常用
-	 * 的之外，后者都是针对与RestFul网络模型。
-	 */
-	protected $_methods = [
-		'get'    => ['REQUEST_METHOD', 'GET'],
-		'post'   => ['REQUEST_METHOD', 'POST'],
-		'put'    => ['REQUEST_METHOD', 'PUT'],
-		'delete' => ['REQUEST_METHOD', 'DELETE'],
-		'head'   => ['REQUEST_METHOD', 'HEAD'],
-		'options'=> ['REQUEST_METHOD', 'OPTIONS']
-	];
+	public $headers = false;
 
-	public function __construct($url = null, $parseEnvironment = true) {
+	public function __construct($uri = null, $parseEnvironment = true) {
 		$this->_base();
-		if (!$url) {
-			$url = $this->_url();
+		if (!$uri) {
+			$uri = $this->_uri();
 		}
-		if ($url[0] === '/') {
-			$url = substr($url, 1);
+		if ($uri[0] === '/') {
+			$uri = substr($uri, 1);
 		}
-		$this->url = $url;
+		$this->uri = $uri;
 
 		if ($parseEnvironment) {
-			//if(!get_magic_quotes_gpc()) {
-			//	$_GET = Suara\new_addslashes($_GET);
-			//	$_POST = Suara\new_addslashes($_POST);
-			//	$_REQUEST = Suara\new_addslashes($_REQUEST);
-			//	$_COOKIE = Suara\new_addslashes($_COOKIE);
-			//}
-
 			$this->processGET();
+			$this->processPOST();
 		}
 
-		//current address
-		//$this->here = $this->base . $this->url;
+		$this->here = $this->base . "/" . $this->uri;
 	}
-
-	/**
-	 * 获取当前页面完整URL地址
-	 */
-	//function get_url() {
-	//	$sys_protocal = isset($_SERVER['SERVER_PORT']) && $_SERVER['SERVER_PORT'] == '443' ? 'https://' : 'http://';
-	//	$php_self = $_SERVER['PHP_SELF'] ? safe_replace($_SERVER['PHP_SELF']) : safe_replace($_SERVER['SCRIPT_NAME']);
-	//	$path_info = isset($_SERVER['PATH_INFO']) ? safe_replace($_SERVER['PATH_INFO']) : '';
-	//	$relate_url = isset($_SERVER['REQUEST_URI']) ? safe_replace($_SERVER['REQUEST_URI']) : $php_self.(isset($_SERVER['QUERY_STRING']) ? '?'.safe_replace($_SERVER['QUERY_STRING']) : $path_info);
-	//	return $sys_protocal.(isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : '').$relate_url;
-	//}
-
-	/**
-	 * 返回一个基础URL。
-	 * 这里的基础url，用作与下面_url相对路径的切割，这样能正确的获取
-	 * 到controller.
-	 * 例如： http://api.example.com/v1/users/show
-	 * 它的绝对路径应该是 /users/show
-	 * 而前面http://api.example.com/v1是指定到具体的apps层，做为一个基础url而存在的。
-	 * @return string 
-	 */
+	
+	//主要针对prefix来处理的
 	private function _base() {
-	}
-
-	public function __get($key) {
-		if (isset($this->params[$key])) {
-			return $this->params[$key];
-		}
-		return null;
 	}
 
 	/**
 	 * Absolute url path
 	 */
-	private function _url() {
+	private function _uri() {
 		if (!empty(Suara\env('PATH_INFO'))) {
 			return Suara\env('PATH_INFO');
 		} elseif (isset($_SERVER['REQUEST_URI']) && strpos(Suara\env('REQUEST_URI'), '://') === false) {
@@ -124,7 +73,7 @@ class Request {
 		}
 
 		$base = $this->base;
-		if (strlen($base) == 0 && strpos($uri, $base) === 0) {
+		if (strlen($base) > 0 && strpos($uri, $base) === 0) {
 			$uri = substr($uri, strlen($base));
 		}
 
@@ -138,12 +87,19 @@ class Request {
 		return $uri;
 	}
 
+	public function __get($key) {
+		if (isset($this->params[$key])) {
+			return $this->params[$key];
+		}
+		return null;
+	}
+
 	/**
 	 * 获取请求ip
 	 *
 	 * @return ip地址
 	 */
-	public function clientIP() {
+	public function ip() {
 		if(Suara\env('HTTP_CLIENT_IP') && strcasecmp(Suara\env('HTTP_CLIENT_IP'), 'unknown')) {
 			$ip = Suara\env('HTTP_CLIENT_IP');
 		} elseif(Suara\env('HTTP_X_FORWARDED_FOR') && strcasecmp(Suara\env('HTTP_X_FORWARDED_FOR'), 'unknown')) {
@@ -156,25 +112,39 @@ class Request {
 		return preg_match ( '/[\d\.]{7,15}/', $ip, $matches ) ? $matches [0] : '';
 	}
 
-	public function addParams($params) {
-		$this->params = array_merge($this->params, (array)$params);
-		return $this;
-	}
-
-	public function addPaths($paths) {
+	public function is($type) {
 
 	}
 
-	public function referer() {
-
-	}
-
-	public function domain() {
-
-	}
-
+	/**
+	 * GET POST PUT DELETE HEAD OPTIONS
+	 */
 	public function method() {
 		return Suara\env('REQUEST_METHOD');
+	}
+
+	public function isGet() {
+		return $this->method() == 'GET';
+	}
+
+	public function isPost() {
+		return $this->method() == 'POST';
+	}
+
+	public function isPut() {
+		return $this->method() == 'PUT';
+	}
+
+	public function isDelete() {
+		return $this->method() == 'DELETE';
+	}
+
+	public function isHead() {
+		return $this->method() == 'HEAD';
+	}
+
+	public function isOptions() {
+		return $this->method() == 'OPTIONS';
 	}
 
 	public function host($trustProxy = false) {
@@ -185,37 +155,90 @@ class Request {
 		return Suara\env('HTTP_HOST');
 	}
 
-	public function processGET() {
+	public function protocal() {
+		if (Suara\env('HTTPS')) {
+			return "https";
+		} else {
+			return "http";
+		}
+	}
+
+	/**
+	 * 域名后缀长度，.com就为1个，比如.com.cn那么就是2个
+	 */
+	public function domain($tldLength = 1) {
+		$info = explode(".", $this->host());
+		$domain = array_slice($info, -($tldLength + 1));
+
+		return join(".", $domain);
+	}
+
+	private function processGET() {
 		if(!get_magic_quotes_gpc()) {
 			$_GET = Suara\new_addslashes($_GET);
 		}
+		$query = $_GET;
+
+		if (strpos($this->uri, "?") !== false) {
+			list(, $queryString) = explode("?", $this->uri);
+			parse_str($queryString, $queryArgs);
+			$query += $queryArgs;
+		}
+	
+		if (isset($this->params['url'])) {
+			$query = array_merge($this->params['url'], $query);
+		}
+
+		$this->query = $query;
+	}
+
+	private function processPOST() {
+		if ($_POST) {
+			$this->data = $_POST;
+		} elseif (($this->isPut() || $this->isDelete())) {
+
+		}
+	}
+
+	private function processFILE() {
 
 	}
 
-	public function processPOST() {
+	public function header($name) {
+		if (!$this->headers) {
+			$this->headers = new HttpHeaders;
+		}
+		$name = strtolower(str_replace('_', '-', $name));
 
+		return $this->headers->get($name);
 	}
 
-	public function processFILE() {
 
+	public function addParams($params) {
+		$this->params = array_merge($this->params, (array)$params);
+		return $this;
 	}
 
+//	public function addPaths($paths) {
+//
+//	}
+//
+//	public function referer() {
+//
+//	}
+	
 	public function param($key) {
 		if (isset($this->params[$key])) {
 			return $this->params[$key];
 		}
-		return null;
+		return false;
 	}
 
-	public function onlyAllow($methods) {
-		
-	}
-
-	private function _readInput() {
-		$fh = fopen("php://input", 'r');
-		$content = stream_get_contents($fh);
-		fclose($fh);
-	}
+//	private function _readInput() {
+//		$fh = fopen("php://input", 'r');
+//		$content = stream_get_contents($fh);
+//		fclose($fh);
+//	}
 }
 
 ?>

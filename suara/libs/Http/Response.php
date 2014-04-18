@@ -7,7 +7,6 @@ namespace Suara\Libs\Http;
 use Suara\Libs\Core\Configure;
 
 class Response {
-
 	/**
 	 * HTTP Status code definitions
 	 * @see http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html
@@ -322,6 +321,7 @@ class Response {
 		$this->_setContent();
 		$this->_setContentLength();
 		$this->_setContentType();
+
 		foreach ($this->_headers as $header => $values) {
 			foreach ((array)$values as $value) {
 				$this->_sendHeader($header, $value);

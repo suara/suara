@@ -104,20 +104,8 @@ use Suara\Libs\Error\ErrorHandler;
 //启用配置文件调用
 use Suara\Libs\Core\Configure;
 
-if (!defined('SITE_URL')) {
-	$s = null;
-	if (env('HTTPS')) {
-		$s = "s";
-	}
-	$httpHost = env('HTTP_HOST');
-	if (isset($httpHost)) {
-		define('SITE_URL', 'http' . $s . "://" . $httpHost);
-	}
-	unset($s, $httpHost);
-}
-
 //booting..
-Configure::bootstrap(isset($boot) ? $boot : true);
+//Configure::bootstrap(isset($boot) ? $boot : true);
 
 //设置默认sessions所报存的目录
 //ini_set("session.save_path", CACHE_PATH."sessions");

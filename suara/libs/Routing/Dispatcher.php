@@ -50,7 +50,7 @@ class Dispatcher {
 
 	public function parseParams($request) {
 		//Router::setRuquestInfo($request);
-		$params = Router::parse($request->url);
+		$params = Router::parse($request->uri);
 		$request->addParams($params);
 	}
 
