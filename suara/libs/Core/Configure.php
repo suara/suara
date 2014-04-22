@@ -9,8 +9,6 @@ use Suara\Libs\Configure\IConfigureReader;
 use Suara\Libs\Configure\PhpReader;
 use Suara\Libs\Configure\IniReader;
 
-defined('IN_SUARA') or exit('Permission deiened');
-
 class Configure {
 	/**
 	 * 将所有的配置数据保存在$_values中

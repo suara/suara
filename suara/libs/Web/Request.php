@@ -21,6 +21,7 @@ use Suara\Libs\Core\Configure;
 class Request {
 	public $base = false;
 
+	//Request-URI
 	public $uri = false;
 
 	public $here = null;
@@ -29,6 +30,7 @@ class Request {
 		'controller' => null,
 		'action'     => null,
 		'named'      => [],
+		'form'       => [],
 		'pass'       => []
 	];
 
@@ -51,6 +53,7 @@ class Request {
 		if ($parseEnvironment) {
 			$this->processGET();
 			$this->processPOST();
+			$this->processFILE();
 		}
 
 		$this->here = $this->base . "/" . $this->uri;
@@ -117,7 +120,8 @@ class Request {
 	}
 
 	/**
-	 * GET POST PUT DELETE HEAD OPTIONS
+	 * rfc2616 5.1.1 Method
+	 * GET POST PUT DELETE HEAD OPTIONS TRACE CONNECT
 	 */
 	public function method() {
 		return Suara\env('REQUEST_METHOD');
@@ -195,15 +199,46 @@ class Request {
 	private function processPOST() {
 		if ($_POST) {
 			$this->data = $_POST;
-		} elseif (($this->isPut() || $this->isDelete())) {
-
+		} elseif (($this->isPut() || $this->isDelete()) && strpos(Suara\env("CONTENT_TYPE"), "application/x-www-form-urlencoded") === 0) {
+			$data = $this->_readInput();
+			parse_str($data, $this->data);
 		}
+
+		$this->data = Suara\new_addslashes($this->data);
+	}
+
+	private function _readInput() {
+		if (empty($this->_input)) {
+			$fh = fopen("php://input", "r");
+			$content = stream_get_contents($fh);
+			fclose($fh);
+			$this->_input = $content;
+		}
+
+		return $this->_input;
 	}
 
 	private function processFILE() {
-
+		if (isset($_FILES) && is_array($_FILES)) {
+			foreach ($_FILES as $name => $data) {
+				if ($name != 'data') {
+					$this->params['form'][$name] = $data;
+				}
+			}
+		}
 	}
 
+	/**
+	 * In Request Header Fields
+	 * Accept
+	 * Accept-Charset
+	 * Accept-Encoding
+	 * Accept-Language
+	 * Authorization
+	 * Except
+	 * From
+	 * Host
+	 */
 	public function header($name) {
 		if (!$this->headers) {
 			$this->headers = new HttpHeaders;
@@ -213,32 +248,17 @@ class Request {
 		return $this->headers->get($name);
 	}
 
-
 	public function addParams($params) {
 		$this->params = array_merge($this->params, (array)$params);
 		return $this;
 	}
 
-//	public function addPaths($paths) {
-//
-//	}
-//
-//	public function referer() {
-//
-//	}
-	
 	public function param($key) {
 		if (isset($this->params[$key])) {
 			return $this->params[$key];
 		}
 		return false;
 	}
-
-//	private function _readInput() {
-//		$fh = fopen("php://input", 'r');
-//		$content = stream_get_contents($fh);
-//		fclose($fh);
-//	}
 }
 
 ?>

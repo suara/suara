@@ -307,7 +307,7 @@ class Response {
 			$options['charset'] = Configure::read('system', 'charset');
 		}
 
-		//$this->charset($options['charset']);
+		$this->charset($options['charset']);
 	}
 
 	public function send() {
@@ -317,22 +317,24 @@ class Response {
 
 		$codeMessage = $this->_statusCodes[$this->_status];
 		$this->_setCookie();
-		$this->_sendHeader("{$this->_protocol} {$this->_status} {$codeMessage}");
-		$this->_setContent();
-		$this->_setContentLength();
-		$this->_setContentType();
+		//$this->_sendHeader("{$this->_protocol} {$this->_status} {$codeMessage}");
+		//$this->_setContent();
+		//$this->_setContentLength();
+		//$this->_setContentType();
 
-		foreach ($this->_headers as $header => $values) {
-			foreach ((array)$values as $value) {
-				$this->_sendHeader($header, $value);
-			}
-		}
+		//foreach ($this->_headers as $header => $values) {
+		//	foreach ((array)$values as $value) {
+		//		$this->_sendHeader($header, $value);
+		//	}
+		//}
 
 		//file
-
-		$this->_sendContent($this->_body);
+		//$this->_sendContent($this->_body);
 	}
 
+	/**
+	 * Set Response header
+	 */
 	public function header($header = null, $value = null) {
 		if ($header == null) {
 			return $this->_headers;
@@ -354,10 +356,6 @@ class Response {
 		return $this->_headers;
 	}
 
-	public function cookie() {
-
-	}
-
 	public function body($content = null) {
 		if ($content == null) {
 			return $this->_body;
@@ -376,6 +374,9 @@ class Response {
 		$this->status = $code;
 	}
 
+	/**
+	 * mime type
+	 */
 	public function type($contentType = null) {
 		if ($contentType == null) {
 			return $this->_contentType;
@@ -400,24 +401,89 @@ class Response {
 
 	}
 
+	public function cookie() {
+
+	}
+
+	/**
+	 * {{{
+	 * Cache
+	 */
+	public function disableCache() {
+		$this->header([
+			'Expires' => 'Thu Jan 01 1970 00:00:00 GMT',
+			'Last-Modified' => gmdate('D, d M Y h:i:s') . " GMT",
+			'Cache-Control' => 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0'
+		]);
+	}
+
+	public function cache($since, $time = "+1 day") {
+		if (!is_int($time)) {
+			$time = strtotime($time);
+		}
+
+
+		//$this->modified($since);
+		$this->expires($time);
+
+		$this->maxAge($time - time());
+	}
+
+	public function sharable($public = null, $time = null) {
+
+	}
+
+	public function sharedMaxAge() {
+
+	}
+
+	public function expires() {
+
+	}
+
+	public function modified() {
+
+	}
+
+	public function maxAge() {
+
+	}
+
+	public function mustRevalidate() {
+
+	}
+
+	protected function _setCacheControl() {
+
+	}
+
+	public function notModified() {
+
+	}
+
+	public function vary() {
+
+	}
+
+	public function etag() {
+
+	}
+
+	/**
+	 * }}}
+	 */
+
+
 	private function _setCookie() {
 		foreach ($this->_cookies as $name => $value) {
 			setcookie($name, $value['value'], $value['expire'], $value['path'], $value['domain'], $value['secure'], $value['httpOnly']);
 		}
 	}
 
-	private function _sendHeader($name, $value = null) {
-		if (!headers_sent()) {
-			if ($value == null) {
-				header($name);
-			} else {
-				header("{$name}: {$value}");
-			}
-		}
-	}
-
 	private function _setContent() {
-
+		if (in_array($this->status, array(304, 204))) {
+			$this->body('');
+		}
 	}
 
 	private function _setContentLength() {
@@ -444,10 +510,24 @@ class Response {
 		}
 	}
 
+	private function _sendHeader($name, $value = null) {
+		if (!headers_sent()) {
+			if ($value == null) {
+				header($name);
+			} else {
+				header("{$name}: {$value}");
+			}
+		}
+	}
+
 	private function _sendContent($content) {
 		echo $content;
 	}
 
+
+	/**
+	 * {{{
+	 */
 	public function compress() {
 		if(function_exists('ob_gzhandler') && !ini_get('zlib.output_compression')) {
 			ob_start('ob_gzhandler');
@@ -459,5 +539,9 @@ class Response {
 	public function outputCompressed() {
 
 	}
+
+	/**
+	 * }}}
+	 */
 }
 ?>
