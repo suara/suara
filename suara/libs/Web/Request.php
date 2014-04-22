@@ -228,6 +228,27 @@ class Request {
 		}
 	}
 
+	public function getHeaders() {
+		if (!$this->headers) {
+			$this->headers = new HttpHeaders;
+			if (function_exists('getallheaders')) {
+				$headers = getallheaders();
+				foreach ($headers as $_name => $value) {
+					$this->headers[$_name] = $value;
+				}
+			} else {
+				foreach ($_SERVER as $_name => $value) {
+					if (substr($_name, 0, 5) == 'HTTP_') {
+						$_name = str_replace(' ', '-', strtolower(str_replace('_', ' ', substr($_name, 5))));
+						$this->headers[$_name] = $value;
+					}
+				}
+			}
+		}
+
+		return $this->headers;
+	}
+
 	/**
 	 * In Request Header Fields
 	 * Accept
@@ -240,11 +261,8 @@ class Request {
 	 * Host
 	 */
 	public function header($name) {
-		if (!$this->headers) {
-			$this->headers = new HttpHeaders;
-		}
+		$this->getHeaders();
 		$name = strtolower(str_replace('_', '-', $name));
-
 		return $this->headers->get($name);
 	}
 
