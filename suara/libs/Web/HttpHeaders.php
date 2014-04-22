@@ -1,6 +1,6 @@
 <?php
 
-namespace Suara\Libs\Http;
+namespace Suara\Libs\Web;
 
 class HttpHeaders extends \ArrayObject {
 	public function __construct() {

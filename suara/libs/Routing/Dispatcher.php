@@ -12,8 +12,8 @@
  * @author        wolftankk@gmail.com		  
  */
 namespace Suara\Libs\Routing;
-use Suara\Libs\Http\Request as Request;
-use Suara\Libs\Http\Response as Response;
+use Suara\Libs\Web\Request as Request;
+use Suara\Libs\Web\Response as Response;
 use Suara\Libs\Routing\Router as Router;
 use Suara\Libs\Controller\Controller as Controller;
 

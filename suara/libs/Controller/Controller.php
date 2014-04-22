@@ -1,7 +1,7 @@
 <?php
 namespace Suara\Libs\Controller;
-use Suara\Libs\Http\Request as Request;
-use Suara\Libs\Http\Response as Response;
+use Suara\Libs\Web\Request as Request;
+use Suara\Libs\Web\Response as Response;
 
 class Controller {
 	public $name = null;

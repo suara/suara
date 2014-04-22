@@ -12,10 +12,10 @@
  * @author        wolftankk@gmail.com		  
  * @see http://blog.wolftankk.com/2013/04/28/php-routing-part-1-request/
  */
-namespace Suara\Libs\Http;
+namespace Suara\Libs\Web;
 
 use Suara;
-use Suara\Libs\Http\HttpHeaders;
+use Suara\Libs\Web\HttpHeaders;
 use Suara\Libs\Core\Configure;
 
 class Request {

@@ -3,7 +3,7 @@
  * 输出控制
  *
  */
-namespace Suara\Libs\Http;
+namespace Suara\Libs\Web;
 use Suara\Libs\Core\Configure;
 
 class Response {
