@@ -6,7 +6,68 @@
 namespace Suara\Libs\Web;
 use Suara\Libs\Core\Configure;
 
+trait Cache {
+	public function disableCache() {
+		$this->header([
+			'Expires' => 'Thu Jan 01 1970 00:00:00 GMT',
+			'Last-Modified' => gmdate('D, d M Y h:i:s') . " GMT",
+			'Cache-Control' => 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0'
+		]);
+	}
+
+	public function cache($since, $time = "+1 day") {
+		if (!is_int($time)) {
+			$time = strtotime($time);
+		}
+
+		//$this->modified($since);
+		//$this->expires($time);
+		//$this->maxAge($time - time());
+	}
+
+	public function sharable($public = null, $time = null) {
+
+	}
+
+	public function sharedMaxAge() {
+
+	}
+
+	public function expires() {
+
+	}
+
+	public function modified() {
+
+	}
+
+	public function maxAge() {
+
+	}
+
+	public function mustRevalidate() {
+
+	}
+
+	protected function _setCacheControl() {
+
+	}
+
+	public function notModified() {
+
+	}
+
+	public function vary() {
+
+	}
+
+	public function etag() {
+
+	}
+}
+
 class Response {
+	use Cache;
 	/**
 	 * HTTP Status code definitions
 	 * @see http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html
@@ -404,75 +465,6 @@ class Response {
 	public function cookie() {
 
 	}
-
-	/**
-	 * {{{
-	 * Cache
-	 */
-	public function disableCache() {
-		$this->header([
-			'Expires' => 'Thu Jan 01 1970 00:00:00 GMT',
-			'Last-Modified' => gmdate('D, d M Y h:i:s') . " GMT",
-			'Cache-Control' => 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0'
-		]);
-	}
-
-	public function cache($since, $time = "+1 day") {
-		if (!is_int($time)) {
-			$time = strtotime($time);
-		}
-
-
-		//$this->modified($since);
-		$this->expires($time);
-
-		$this->maxAge($time - time());
-	}
-
-	public function sharable($public = null, $time = null) {
-
-	}
-
-	public function sharedMaxAge() {
-
-	}
-
-	public function expires() {
-
-	}
-
-	public function modified() {
-
-	}
-
-	public function maxAge() {
-
-	}
-
-	public function mustRevalidate() {
-
-	}
-
-	protected function _setCacheControl() {
-
-	}
-
-	public function notModified() {
-
-	}
-
-	public function vary() {
-
-	}
-
-	public function etag() {
-
-	}
-
-	/**
-	 * }}}
-	 */
-
 
 	private function _setCookie() {
 		foreach ($this->_cookies as $name => $value) {
