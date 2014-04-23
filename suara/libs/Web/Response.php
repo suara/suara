@@ -504,7 +504,6 @@ class Response {
 			$options['charset'] = Configure::read('system', 'charset');
 		}
 		$this->charset($options['charset']);
-
 	}
 
 	public function send() {
@@ -515,9 +514,9 @@ class Response {
 		$codeMessage = $this->_statusCodes[$this->_status];
 		$this->_setCookie();
 		$this->_sendHeader("{$this->_protocol} {$this->_status} {$codeMessage}");
-		//$this->_setContent();
-		//$this->_setContentLength();
-		//$this->_setContentType();
+		$this->_setContent();
+		$this->_setContentLength();
+		$this->_setContentType();
 
 		foreach ($this->_headers as $header => $values) {
 			foreach ((array)$values as $value) {
@@ -526,7 +525,7 @@ class Response {
 		}
 
 		//file
-		//$this->_sendContent($this->_body);
+		$this->_sendContent($this->_body);
 	}
 
 	/**
@@ -568,7 +567,7 @@ class Response {
 			//throw
 		}
 
-		$this->status = $code;
+		$this->_status = $code;
 	}
 
 	/**
@@ -579,9 +578,9 @@ class Response {
 			return $this->_contentType;
 		}
 
-		if (is_array($contentType)) {
+		//if (is_array($contentType)) {
 
-		}
+		//}
 
 		if (isset($this->_mimeTypes[$contentType])) {
 			$contentType = $this->_mimeTypes[$contentType];
@@ -591,6 +590,7 @@ class Response {
 		if (strpos($contentType, '/') === false) {
 			return false;
 		}
+
 		return $this->_contentType = $contentType;
 	}
 
@@ -609,7 +609,7 @@ class Response {
 	}
 
 	private function _setContent() {
-		if (in_array($this->status, array(304, 204))) {
+		if (in_array($this->_status, array(304, 204))) {
 			$this->body('');
 		}
 	}

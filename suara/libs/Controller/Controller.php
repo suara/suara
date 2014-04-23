@@ -44,8 +44,8 @@ class Controller {
 		try {
 			$method = new \ReflectionMethod($this, $request->params['action']);
 			if ($this->_isPrivateAction($method, $request)) {
-			}
 
+			}
 			return $method->invokeArgs($this, $request->params['pass']);
 		} catch (\ReflectionException $e) {
 		}
@@ -65,9 +65,21 @@ class Controller {
 	/**
 	 * 页面最终输出
 	 */
-	public function render() {
-		$class = 'Suara\\Libs\\View\\'.$this->viewClass;
-		$this->view = new $class($this);
+	public function render($view = null, $layout = null) {
+		if (empty($this->view)) {
+			$this->view = $this->getViewer();
+		}
+
+		//$this->response->body($this->view->render($view, $layout));
+
+		return $this->response;
+	}
+
+	private function getViewer() {
+		$viewClass = $this->viewClass;
+		$class = "Suara\\Libs\\View\\" . $viewClass;
+
+		return new $class($this);
 	}
 }
 

@@ -59,6 +59,7 @@ class Kernel {
 		$file = $path.$normalizedClassName.".php";
 
 		$hashKey = md5($file);
+
 		if (!empty(self::$_map[$hashKey])) {
 			return true;
 		}

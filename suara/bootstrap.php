@@ -105,8 +105,11 @@ use Suara\Libs\Error\ErrorHandler;
 use Suara\Libs\Core\Configure;
 
 //booting..
-//Configure::bootstrap(isset($boot) ? $boot : true);
+Configure::bootstrap(isset($boot) ? $boot : true);
 
 //设置默认sessions所报存的目录
 //ini_set("session.save_path", CACHE_PATH."sessions");
+
+
+date_default_timezone_set('Asia/Shanghai');
 ?>
