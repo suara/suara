@@ -6,7 +6,15 @@
 namespace Suara\Libs\Web;
 use Suara\Libs\Core\Configure;
 
+use DateTime, DateTimeZone;
+
+/**
+ * Caching in HTTP
+ * @see http://www.w3.org/Protocols/rfc2616/rfc2616-sec13.html#sec13
+ */
 trait Cache {
+	protected $_cacheDirectives = [];
+
 	public function disableCache() {
 		$this->header([
 			'Expires' => 'Thu Jan 01 1970 00:00:00 GMT',
@@ -20,49 +28,178 @@ trait Cache {
 			$time = strtotime($time);
 		}
 
-		//$this->modified($since);
-		//$this->expires($time);
-		//$this->maxAge($time - time());
+		$this->header([
+			'Date' => gmdate('D, j M Y G:i:s') . " GMT"
+		]);
+
+		$this->modified($since);
+		$this->expires($time);
+		$this->sharable(true);
+		$this->maxAge($time - time());
 	}
 
 	public function sharable($public = null, $time = null) {
+		if ($public === null) {
+			$public = array_key_exists('public', $this->_cacheDirectives);
+			$private = array_key_exists('private', $this->_cacheDirectives);
+			$noCache = array_key_exists('no-cache', $this->_cacheDirectives);
 
+			if (!$public && !$private && !$noCache) {
+				return null;
+			}
+
+		}
+
+		if ($public) {
+			$this->_cacheDirectives['public'] = true;
+			unset($this->_cacheDirectives['private']);
+			$this->sharedMaxAge($time);
+		} else {
+			$this->_cacheDirectives['private'] = false;
+			unset($this->_cacheDirectives['public']);
+			$this->maxAge($time);
+		}
+
+		if (!$time) {
+			$this->_setCacheControl();
+		}
+
+		return (bool)$public;
 	}
 
-	public function sharedMaxAge() {
+	public function sharedMaxAge($seconds = null) {
+		if ($seconds !== null) {
+			$this->_cacheDirectives['s-maxage'] = $seconds;
+			$this->_setCacheControl();
+		}
 
+		if (isset($this->_cacheDirectives['s-maxage'])) {
+			return $this->_cacheDirectives['s-maxage'];
+		}
+
+		return null;
 	}
 
-	public function expires() {
+	private function _getUTCDate($time) {
+		if ($time instanceof DateTime) {
+			$result = clone $time;
+		} elseif (is_int($time)) {
+			$result = new DateTime(date('Y-m-d H:i:s', $time));
+		} else {
+			$result = new DateTime($time);
+		}
 
+		$result->setTimeZone(new DateTimeZone('UTC'));
+		return $result;
 	}
 
-	public function modified() {
+	public function expires($time = null) {
+		if ($time !== null) {
+			$date = $this->_getUTCDate($time);
+			$this->_headers['Expires'] = $date->format('D, j M Y H:i:s') . " GMT";
+		}
 
+		if (isset($this->_headers['Expires'])) {
+			return $this->_headers['Expires'];
+		}
+
+		return null;
 	}
 
-	public function maxAge() {
+	public function modified($time = null) {
+		if ($time !== null) {
+			$date = $this->_getUTCDate($time);
+			$this->_headers['Last-Modified'] = $date->format('D, j M Y H:i:s'). " GMT";
+		}
 
+		if (isset($this->_headers['Last-Modified'])) {
+			return $this->_headers['Last-Modified'];
+		}
+
+		return null;
 	}
 
-	public function mustRevalidate() {
+	public function maxAge($seconds = null) {
+		if ($seconds !== null) {
+			$this->_cacheDirectives['max-age'] = $seconds;
+			$this->_setCacheControl();
+		}
+		if (isset($this->_cacheDirectives['max-age'])) {
+			return $this->_cacheDirectives['max-age'];
+		}
 
+		return null;
+	}
+
+	public function mustRevalidate($enable = null) {
+		if ($enable !== null) {
+			if ($enable) {
+				$this->_cacheDirectives['must-revalidate'] = true;
+			} else {
+				unset($this->_cacheDirectives['must-revalidate']);
+			}
+		}
+
+		return array_key_exists('must-revalidate', $this->_cacheDirectives);
 	}
 
 	protected function _setCacheControl() {
-
+		$control = '';
+		foreach ($this->_cacheDirectives as $key => $val) {
+			$control .= (($val === true) ? $key : sprintf('%s=%s', $key, $val));
+			$control .= ', ';
+		}
+		$control = \trim($control);
+		$this->header('Cache-Control', $control);
 	}
 
 	public function notModified() {
+		$this->statusCode(304);
+		$this->body('');
+		$removeHeaders = [
+			'Allow',
+			'Content-Encoding',
+			'Content-Language',
+			'Content-Length',
+			'Content-MD5',
+			'Content-Type',
+			'Last-Modified'
+		];
 
+		foreach ($removeHeaders as $header) {
+			unset($this->_headers[$header]);
+		}
 	}
 
-	public function vary() {
+	/**
+	 * rfc2616 Vary
+	 * The Vary field value indicates the set of request-header fields that fully determines
+	 * @see http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html
+	 *
+	 */
+	public function vary($varies = null) {
+		if ($varies != null) {
+			$varies = (array)$varies;
+			$this->_headers['Vary'] = join(",", $varies);
+		}
 
+		if ($this->_headers['Vary']) {
+			return explode(",", $this->_headers['Vary']);
+		}
+
+		return null;
 	}
 
-	public function etag() {
+	public function etag($tag = null) {
+		if ($tag !== null) {
+			$this->_headers['Etag'] = $tag;
+		}
 
+		if (isset($this->_headers['Etag'])) {
+			return $this->_headers['Etag'];
+		}
+
+		return null;
 	}
 }
 
@@ -360,15 +497,14 @@ class Response {
 		}
 
 		if (isset($options['type'])) {
-			//mime type
 			$this->type($options['type']);
 		}
 
 		if (!isset($options['charset'])) {
 			$options['charset'] = Configure::read('system', 'charset');
 		}
-
 		$this->charset($options['charset']);
+
 	}
 
 	public function send() {
@@ -378,16 +514,16 @@ class Response {
 
 		$codeMessage = $this->_statusCodes[$this->_status];
 		$this->_setCookie();
-		//$this->_sendHeader("{$this->_protocol} {$this->_status} {$codeMessage}");
+		$this->_sendHeader("{$this->_protocol} {$this->_status} {$codeMessage}");
 		//$this->_setContent();
 		//$this->_setContentLength();
 		//$this->_setContentType();
 
-		//foreach ($this->_headers as $header => $values) {
-		//	foreach ((array)$values as $value) {
-		//		$this->_sendHeader($header, $value);
-		//	}
-		//}
+		foreach ($this->_headers as $header => $values) {
+			foreach ((array)$values as $value) {
+				$this->_sendHeader($header, $value);
+			}
+		}
 
 		//file
 		//$this->_sendContent($this->_body);

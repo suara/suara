@@ -115,10 +115,6 @@ class Request {
 		return preg_match ( '/[\d\.]{7,15}/', $ip, $matches ) ? $matches [0] : '';
 	}
 
-	public function is($type) {
-
-	}
-
 	/**
 	 * rfc2616 5.1.1 Method
 	 * GET POST PUT DELETE HEAD OPTIONS TRACE CONNECT

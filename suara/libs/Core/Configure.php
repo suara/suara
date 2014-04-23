@@ -13,12 +13,12 @@ class Configure {
 	/**
 	 * 将所有的配置数据保存在$_values中
 	 */
-	protected static $_values = array();
+	protected static $_values = [];
 
 	/**
 	 * 将所有的配置文件读取器保存在$_readers中
 	 */
-	protected static $_readers = array();
+	protected static $_readers = [];
 
 	/**
 	 * 初始化配置同时启动系统

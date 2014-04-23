@@ -15,20 +15,11 @@ namespace Suara\Libs\Routing;
 
 use Suara\Libs\Routing\Routes as Routes;
 
-//路由器模式
-// $router = [
-//   '/' => [controller, action, addtionsParams]
-//   '/:controller/'
-//   '/v1/:controller/:action'
-//
-// ]
-
 class Router {
 	/**
 	 * 路由器规则存放与此
 	 */
 	public static $routes = [];
-
 
 	public static $initialized = false;
 
@@ -52,7 +43,6 @@ class Router {
 		self::$initialized = true;
 
 		//prefix
-
 		if (empty($defaults['action'])) {
 			$defaults += ['action' => 'init'];
 		}
