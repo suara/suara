@@ -7,10 +7,10 @@
  * Redistributions of files must retain the above copyright notice.
  *
  * @link          http://suaraphp.com
- * @package       Suara.Http
+ * @package       Suara.Web
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  * @author        wolftankk@gmail.com		  
- * @Description   HTTP Headers Collection.
+ * @description   HTTP Headers Collection.
  */
 namespace Suara\Libs\Web;
 

@@ -58,7 +58,6 @@ class Controller {
 	private function _isPrivateAction(\ReflectionMethod $method, Request $request) {
 		$privateAction = ($method->name[0] === '_' || !$method->isPublic());
 
-
 		return $privateAction;
 	}
 

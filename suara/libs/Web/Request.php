@@ -245,17 +245,6 @@ class Request {
 		return $this->headers;
 	}
 
-	/**
-	 * In Request Header Fields
-	 * Accept
-	 * Accept-Charset
-	 * Accept-Encoding
-	 * Accept-Language
-	 * Authorization
-	 * Except
-	 * From
-	 * Host
-	 */
 	public function header($name) {
 		$this->getHeaders();
 		$name = strtolower(str_replace('_', '-', $name));

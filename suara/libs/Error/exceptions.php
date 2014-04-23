@@ -88,7 +88,10 @@ class InternalErrorException extends HttpException {
  *
  */
 class Exception extends BaseException {
+	public function __construct($message, $code = 500) {
 
+		parent::__construct($message, $code);
+	}
 }
 
 //missing controller exception
@@ -100,7 +103,9 @@ class MissingControllerException extends Exception {
 }
 
 class MissingActionException extends Exception {
-
+	public function __construct($message, $code = 404) {
+		parent::__construct($message, $code);
+	}
 }
 
 class PrivateActionException extends Exception {
