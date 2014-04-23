@@ -35,9 +35,13 @@ class Log {
 
 	protected static $_levels;
 
+	protected static $_levelMap;
+
+	protected static $_collection;
+
 	protected static function _init() {
-		self::$_levels = self::$_defaultLevels;
-		self::$_Collection = new LogEngineCollection;
+		self::$_levels = self::defaultLevels();
+		self::$_collection = new LogEngineCollection;
 	}
 
 	public static function config($key, $config) {
@@ -45,10 +49,10 @@ class Log {
 	}
 
 	public static function configured() {
-		if (empty(self::$_Collection)) {
+		if (empty(self::$_collection)) {
 			self::_init();
 		}
-		self::$_Collection->loaded();
+		self::$_collection->loaded();
 	}
 
 	public static function levels() {
@@ -56,7 +60,10 @@ class Log {
 	}
 
 	public static function defaultLevels() {
+		self::$_levelMap = self::$_defaultLevels;
+		self::$_levels = array_flip(self::$_levelMap);
 
+		return self::$_levels;
 	}
 
 	public static function drop() {
@@ -65,6 +72,13 @@ class Log {
 
 	public static function stream() {
 
+	}
+
+	private static function _autoConfig() {
+		self::$_collection->load('default', [
+			'engine' => 'File',
+			'path'   => APP_LOGS_PATH
+		]);
 	}
 
 	/**
@@ -82,37 +96,39 @@ class Log {
 	 * ### 使用方法:
 	 */
 	public static function write($type, $message, $scope = array()) {
-		//if (empty(self::$_Collection)) {
-		//	self::_init();
-		//}
+		if (empty(self::$_collection)) {
+			self::_init();
+		}
+	
+		self::_autoConfig();
 	}
 
 	public static function emergency($message, $scope = array()) {
-
+		return self::write(self::$_levelMap['emergency'], $message, $scope);
 	}
 
 	public static function alert($message, $scope = array()) {
-
+		return self::write(self::$_levelMap['alert'], $message, $scope);
 	}
 
 	public static function critical($message, $scope = array()) {
-
+		return self::write(self::$_levelMap['critical'], $message, $scope);
 	}
 
 	public static function error($message, $scope = array()) {
-
+		return self::write(self::$_levelMap['error'], $message, $scope);
 	}
 
 	public static function warning($message, $scope = array()) {
-
+		return self::write(self::$_levelMap['warning'], $message, $scope);
 	}
 
 	public static function notice($message, $scope = array()) {
-
+		return self::write(self::$_levelMap['notice'], $message, $scope);
 	}
 
 	public static function info($message, $scope = array()) {
-
+		return self::write(self::$_levelMap['info'], $message, $scope);
 	}
 }
 ?>

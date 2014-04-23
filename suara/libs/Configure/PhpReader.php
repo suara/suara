@@ -2,6 +2,8 @@
 namespace Suara\Libs\Configure;
 use Suara\Libs\Configure\IConfigureReader;
 
+use Suara\Libs\Error\ConfigureException;
+
 class PhpReader implements IConfigureReader {
 	protected $_path = null;
 

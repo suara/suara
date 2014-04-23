@@ -4,7 +4,7 @@ use Suara\Libs\Log\ILogStream;
 
 class FileLog implements ILogStream {
 	protected $_defaults = array(
-		'path' => LOGS_PATH,
+		'path' => APP_LOGS_PATH,
 		'file' => null,
 		'types'=> null,
 		'scopes'=>array(),

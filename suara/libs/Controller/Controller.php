@@ -3,6 +3,9 @@ namespace Suara\Libs\Controller;
 use Suara\Libs\Web\Request as Request;
 use Suara\Libs\Web\Response as Response;
 
+use Suara\Libs\Error\MissingActionException;
+use Suara\Libs\Error\PrivateActionException;
+
 class Controller {
 	public $name = null;
 
@@ -44,10 +47,11 @@ class Controller {
 		try {
 			$method = new \ReflectionMethod($this, $request->params['action']);
 			if ($this->_isPrivateAction($method, $request)) {
-
+				throw new PrivateActionException("This {$method} is private method.");
 			}
 			return $method->invokeArgs($this, $request->params['pass']);
 		} catch (\ReflectionException $e) {
+			throw new MissingActionException("missing action");
 		}
 	}
 

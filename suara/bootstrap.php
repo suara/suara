@@ -105,6 +105,7 @@ use Suara\Libs\Error\ErrorHandler;
 use Suara\Libs\Core\Configure;
 
 //booting..
+$boot = false;
 Configure::bootstrap(isset($boot) ? $boot : true);
 
 //设置默认sessions所报存的目录
@@ -112,4 +113,9 @@ Configure::bootstrap(isset($boot) ? $boot : true);
 
 
 date_default_timezone_set('Asia/Shanghai');
+
+use Suara\Libs\Log\Log;
+
+Log::write('INFO', 111);
+
 ?>
