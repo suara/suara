@@ -47,7 +47,6 @@ trait Cache {
 			if (!$public && !$private && !$noCache) {
 				return null;
 			}
-
 		}
 
 		if ($public) {
@@ -622,6 +621,7 @@ class Response {
 		if (in_array($this->_status, array(304, 204))) {
 			return;
 		}
+
 		$whitelist = array(
 			'application/javascript', 'application/json', 'application/xml', 'application/rss+xml'
 		);

@@ -113,9 +113,4 @@ Configure::bootstrap(isset($boot) ? $boot : true);
 
 
 date_default_timezone_set('Asia/Shanghai');
-
-use Suara\Libs\Log\Log;
-
-Log::write('INFO', 111);
-
 ?>
