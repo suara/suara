@@ -1,11 +1,19 @@
 <?php
 /**
- * 输出控制
+ * Suara Bootstrap (http://suaraphp.com)
  *
+ * Licensed under The MIT License
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @link          http://suaraphp.com
+ * @package       Suara.Libs.Web
+ * @license       http://www.opensource.org/licenses/mit-license.php MIT License
+ * @author        wolftankk@gmail.com		  
  */
+
 namespace Suara\Libs\Web;
 use Suara\Libs\Core\Configure;
-
 use DateTime, DateTimeZone;
 
 /**
@@ -202,8 +210,21 @@ trait Cache {
 	}
 }
 
+trait Cookie {
+	protected $_cookies = [];
+	public function cookie() {
+
+	}
+
+	private function _setCookie() {
+		foreach ($this->_cookies as $name => $value) {
+			setcookie($name, $value['value'], $value['expire'], $value['path'], $value['domain'], $value['secure'], $value['httpOnly']);
+		}
+	}
+}
+
 class Response {
-	use Cache;
+	use Cache, Cookie;
 	/**
 	 * HTTP Status code definitions
 	 * @see http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html
@@ -480,8 +501,6 @@ class Response {
 
 	protected $_headers = [];
 
-	protected $_cookies = [];
-
 	protected $_body = null;
 
 	protected $_charset = 'UTF-8';
@@ -595,16 +614,6 @@ class Response {
 
 	public function charset() {
 
-	}
-
-	public function cookie() {
-
-	}
-
-	private function _setCookie() {
-		foreach ($this->_cookies as $name => $value) {
-			setcookie($name, $value['value'], $value['expire'], $value['path'], $value['domain'], $value['secure'], $value['httpOnly']);
-		}
 	}
 
 	private function _setContent() {

@@ -147,6 +147,10 @@ class Request {
 		return $this->method() == 'OPTIONS';
 	}
 
+	public function isConnect() {
+		return $this->method() == 'CONNECT';
+	}
+
 	public function host($trustProxy = false) {
 		if ($trustProxy) {
 			return Suara\env('HTTP_X_FORWARDED_HOST');
@@ -194,6 +198,9 @@ class Request {
 
 	private function processPOST() {
 		if ($_POST) {
+			if (!get_magic_quotes_gpc()) {
+				$_POST = Suara\new_addslashes($_POST);
+			}
 			$this->data = $_POST;
 		} elseif (($this->isPut() || $this->isDelete()) && strpos(Suara\env("CONTENT_TYPE"), "application/x-www-form-urlencoded") === 0) {
 			$data = $this->_readInput();

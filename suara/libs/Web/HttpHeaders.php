@@ -14,8 +14,6 @@
  */
 namespace Suara\Libs\Web;
 
-use ArrayIterator;
-
 class HttpHeaders implements \IteratorAggregate, \ArrayAccess, \Countable {
 	private $_headers = [];
 
