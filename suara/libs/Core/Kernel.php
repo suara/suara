@@ -11,11 +11,20 @@
  *
  */
 namespace Suara\Libs\Core;
-defined('IN_SUARA') or exit('Permission deiened');
 
 class Kernel {
+	/**
+	 * save all loaded classes
+	 */
 	protected static $_map = [];
-	private static $classTypes = ["Libs", "Plugins", "Apps"];
+
+	private static $classTypes = [
+		"Libs" => SUARA_CORE_PATH, 
+		"Plugins" => SUARA_PLUGINS_PATH, 
+		"Apps" => SUARA_APPS_PATH
+	];
+
+	public static $booting = false;
 	
 	/**
 	 * Suara内核自动加载类
@@ -33,34 +42,24 @@ class Kernel {
 	 * @param string $className need autoload class
 	 */
 	public static function load($className) {
+		//判断是否是属于Suara的内库
 		if ( strpos($className, "Suara") !== 0 ) {
 			return false;
 		}
 
 		list(, $type, $parts)= explode("\\", $className, 3);
 
-		if (!in_array($type, self::$classTypes)) {
-			return false;
-		}
-
 		$path = "";
-		switch ($type) {
-			case "Libs":
-				$path = SUARA_CORE_PATH;
-				break;
-			case "Plugins":
-				$path = SUARA_PLUGINS_PATH;
-				break;
-			case "Apps":
-				$path = SUARA_APPS_PATH;
-				break;
+		if (!empty(self::$classTypes[$type])) {
+			$path = self::$classTypes[$type];
+		} else {
+			return false;
 		}
 
 		$normalizedClassName = str_replace('\\', DIRECTORY_SEPARATOR, $parts);
 		$file = $path.$normalizedClassName.".php";
 
 		$hashKey = md5($file);
-
 		if (!empty(self::$_map[$hashKey])) {
 			return true;
 		}
@@ -74,23 +73,57 @@ class Kernel {
 	}
 
 	/**
-	 * 
+	 * 载入指定的文件或者其他
+	 * 提供载入额外的class, file, vendor
+	 *
+	 * @param string $type 需要载入文件的类型
+	 * @param string $name
+	 * @param string $file
 	 */
-	public static function import($type, $path) {
+	public static function import($type = null, $name = null, $file = null) {
+		if (!empty($name) && !empty($file)) {
+			return;
+		}
 
+		$ltype = strtolower($type);
+		$returnValue = false;
+
+		$hashKey = md5($file);
+		if (!empty(self::$_map[$hashKey])) {
+			return true;
+		}
+
+		if ($ltype == 'file') {
+			$returnValue = self::_loadFile($file);
+		}
+
+		if ($returnValue) {
+			self::$_map[$hashKey] = $file;
+		}
+
+		return $returnValue;
 	}
 
-	protected static function _loadClass() {
+	/**
+	 * _load special file
+	 */
+	protected static function _loadFile($path) {
+		if (!file_exists($path)) {
+			return false;
+		}
 
+		if (!is_readable($path)) {
+			return false;
+		}
+
+		return include $path;
 	}
 
-	protected static function _loadFile() {
+	//protected static function _loadClass() {
+	//}
 
-	}
-
-	protected static function _loadVendor() {
-
-	}
+	//protected static function _loadVendor() {
+	//}
 
 	public static function init() {
 		register_shutdown_function(['Suara\Libs\Core\Kernel', 'shutdown']);

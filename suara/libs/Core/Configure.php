@@ -5,6 +5,7 @@
  * 配置文件读取器
  */
 namespace Suara\Libs\Core;
+use Suara\Libs\Core\Kernel;
 use Suara\Libs\Configure\IConfigureReader;
 use Suara\Libs\Configure\PhpReader;
 use Suara\Libs\Configure\IniReader;
@@ -33,9 +34,12 @@ class Configure {
 	 */
 	public static function bootstrap($boot = true) {
 		if ($boot) {
-			if (!include APP_CONFIG_PATH.DIRECTORY_SEPARATOR.'system.php') {
-				trigger_error('Cannot found the system php file', E_USER_ERROR);
+			if (!Kernel::import('file', null, APP_CONFIG_PATH.'system.php')) {
+				trigger_error('Cannot found the system config php file', E_USER_ERROR);
 			}
+
+			Kernel::init();
+			Kernel::$booting = true;
 
 			$exception = array(
 				'handler' => 'Suara\Libs\Error\ErrorHandler::handleException'

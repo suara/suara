@@ -102,21 +102,20 @@ if (!defined("APP_WWWROOT_PATH")) {
 //global funcs
 include_once S_PATH.'globals.php';
 
-exit;
 //载入核心启动文件
-//require SUARA_CORE_PATH."Core".DIRECTORY_SEPARATOR."Kernel.php";
-////将系统异常加载进来
-//require SUARA_CORE_PATH."Error".DIRECTORY_SEPARATOR."exceptions.php";
-////启用spl自动加载功能
-//spl_autoload_register(array("Suara\Libs\Core\Kernel", "load"));
-////启用错误处理
-//use Suara\Libs\Error\ErrorHandler;
-////启用配置文件调用
-//use Suara\Libs\Core\Configure;
-//
-////booting..
-//$boot = false;
-//Configure::bootstrap(isset($boot) ? $boot : true);
-//
-//date_default_timezone_set('Asia/Shanghai');
+require SUARA_CORE_PATH."Core".DIRECTORY_SEPARATOR."Kernel.php";
+//将系统异常加载进来
+require SUARA_CORE_PATH."Error".DIRECTORY_SEPARATOR."exceptions.php";
+//启用spl自动加载功能
+spl_autoload_register(array("Suara\Libs\Core\Kernel", "load"));
+//启用错误处理
+use Suara\Libs\Error\ErrorHandler;
+//启用配置文件调用
+use Suara\Libs\Core\Configure;
+
+//booting..
+$boot = false;
+Configure::bootstrap(isset($boot) ? $boot : true);
+
+date_default_timezone_set('Asia/Shanghai');
 ?>

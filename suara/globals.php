@@ -1,6 +1,18 @@
 <?php
-namespace Suara;
+/**
+ * Suara functions (http://suaraphp.com)
+ *
+ * Licensed under The MIT License
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @link          http://suaraphp.com
+ * @package       Suara
+ * @license       http://www.opensource.org/licenses/mit-license.php MIT License
+ * @author        wolftankk@gmail.com		  
+ */
 
+namespace Suara;
 use Suara\Libs\Core\Configure;
 
 /**
@@ -241,57 +253,6 @@ function env($key) {
 
 	return null;
 }
-
-/**
- * Cache
- */
-function setcache($name, $data, $filepath = '', $type = 'file', $config='', $timeout=30) {
-	//s_core::load_sys_class('cache_factory', '', 0);
-	//if ($config) {
-	//	$cacheconfig = s_core::load_config('cache');
-	//	$cache = cache_factory::get_instance($cacheconfig)->get_cache($config);
-	//} else {
-	//	$cache = cache_factory::get_instance()->get_cache($type);
-	//}
-
-	////clear 
-	//return $cache->set($name, $data, $timeout, '', $filepath);
-}
-
-function getcache($name, $filepath='', $type='file', $config='') {
-	//s_core::load_sys_class('cache_factory', '', 0);
-	//if ($config) {
-	//	$cacheconfig = s_core::load_config('cache');
-	//	$cache = cache_factory::get_instance($cacheconfig)->get_cache($config);
-	//} else {
-	//	$cache = cache_factory::get_instance()->get_cache($type);
-	//}
-
-	//return $cache->get($name, '', $filepath);
-}
-
-function delcache($name, $filepath='', $type='file', $config='') {
-	//s_core::load_sys_class('cache_factory', '', 0);
-	//if ($config) {
-	//	$cacheconfig = s_core::load_config('cache');
-	//	$cache = cache_factory::get_instance($cacheconfig)->get_cache($config);
-	//} else {
-	//	$cache = cache_factory::get_instance()->get_cache($type);
-	//}
-	//return $cache->delete($name, '', '', $filepath);
-}
-
-function getcacheinfo($name, $filepath ='', $type='file', $config='') {
-	//s_core::load_sys_class('cache_factory', '', 0);
-	//if ($config) {
-	//	$cacheconfig = s_core::load_config('cache');
-	//	$cache = cache_factory::get_instance($cacheconfig)->get_cache($config);
-	//} else {
-	//	$cache = cache_factory::get_instance()->get_cache($config);
-	//}
-	//return $cache->cacheinfo($name, '', '', $filepath);
-}
-
 
 /**
  * 将字符串转换为数组
