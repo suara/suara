@@ -13,7 +13,7 @@
  */
 namespace Suara\Libs\Routing;
 
-use Suara\Libs\Routing\Routes as Routes;
+use Suara\Libs\Core\Kernel;
 
 class Router {
 	/**
@@ -118,7 +118,7 @@ class Router {
 	 */
 	protected static function loadRouteConfigs() {
 		self::$initialized = true;
-		include APP_CONFIG_PATH . 'routers.php';
+		Kernel::import('file', null, APP_CONFIG_PATH.'routers.php');
 	}
 }
 ?>

@@ -5,6 +5,8 @@ use Suara\Libs\Web\Response as Response;
 
 use Suara\Libs\Error\MissingActionException;
 use Suara\Libs\Error\PrivateActionException;
+use ReflectionMethod;
+use ReflectionException;
 
 class Controller {
 	public $name = null;
@@ -45,12 +47,14 @@ class Controller {
 	//调用实际方法
 	public function invodeAction(Request $request) {
 		try {
-			$method = new \ReflectionMethod($this, $request->params['action']);
+			$method = new ReflectionMethod($this, $request->params['action']);
 			if ($this->_isPrivateAction($method, $request)) {
-				throw new PrivateActionException("This {$method} is private method.");
+				throw new PrivateActionException("This {$method->name} is private method.");
 			}
+
+			//call method func;
 			return $method->invokeArgs($this, $request->params['pass']);
-		} catch (\ReflectionException $e) {
+		} catch (ReflectionException $e) {
 			throw new MissingActionException("missing action");
 		}
 	}
