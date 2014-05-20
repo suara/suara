@@ -30,6 +30,7 @@ class Kernel {
 	 * 具体关于namespace可以直接参考php官方文件。
 	 * @see http://www.php.net/manual/en/language.namespaces.php
 	 *
+	 * @param string $className need autoload class
 	 */
 	public static function load($className) {
 		if ( strpos($className, "Suara") !== 0 ) {

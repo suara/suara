@@ -29,6 +29,7 @@ class Configure {
 	 * - 载入APP配置文件
 	 * - 载入config中bootstrap.php
 	 * - 错误处理
+	 * @param boolean $boot if boot true while enable custom error handler and exception
 	 */
 	public static function bootstrap($boot = true) {
 		if ($boot) {
@@ -63,6 +64,7 @@ class Configure {
 	 * @param string $type 配置类型 默认含有System
 	 * @param mixed $config 所对应的配置参数
 	 * @param mixed $value 配置参数值
+	 *
 	 */
 	public static function write($type, $config, $value = null) {
 		if (!is_array($config)) {

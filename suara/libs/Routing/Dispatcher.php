@@ -21,69 +21,68 @@ use Suara\Libs\Error\MissingControllerException;
 
 class Dispatcher {
 	public function dispatch(Request $request, Response $response) {
-		$this->parseParams($request);
+		//$this->parseParams($request);
 
-		$controller = $this->_getController($request, $response);
+		//$controller = $this->_getController($request, $response);
 
-		if (!($controller instanceof Controller)) {
-			throw new MissingControllerException("{$controller} is not exists");
-			exit;
-		}
+		//if (!($controller instanceof Controller)) {
+		//	throw new MissingControllerException("{$controller} is not exists");
+		//	exit;
+		//}
 
-		//controller 调用$action
-		$response = $this->_invoke($controller, $request, $response);
-		
-		if (isset($request->params['return'])) {
-			return $response->body();
-		}
+		////controller 调用$action
+		//$response = $this->_invoke($controller, $request, $response);
+		//
+		//if (isset($request->params['return'])) {
+		//	return $response->body();
+		//}
 
-		//输出
-		$response->send();
+		////输出
+		//$response->send();
 	}
 
 	public function _invoke(Controller $controller, Request $request, Response $response) {
-		$controller->invodeAction($request);
+		//$controller->invodeAction($request);
 
-
-		return $response;
+		//return $response;
 	}
 
 	public function parseParams($request) {
 		//Router::setRuquestInfo($request);
-		$params = Router::parse($request->uri);
-		$request->addParams($params);
+		//$params = Router::parse($request->uri);
+		//$request->addParams($params);
 	}
 
 	protected function _getController($request, $response) {
-		$className = $this->_loadController($request);
-		if (!$className) {
-			return false;
-		}
-		$reflection = new \ReflectionClass($className);
-		if ($reflection->isAbstract() || $reflection->isInterface()) {
-			return false;
-		} else {
-			return $reflection->newInstance($request, $response);
-		}
+		//$className = $this->_loadController($request);
+		//if (!$className) {
+		//	return false;
+		//}
+		//$reflection = new \ReflectionClass($className);
+		//if ($reflection->isAbstract() || $reflection->isInterface()) {
+		//	return false;
+		//} else {
+		//	return $reflection->newInstance($request, $response);
+		//}
 	}
 
 	protected function _loadController($request) {
-		$controller = null;
-		if (!empty($request->params['controller'])) {
-			$controller = $request->params['controller'];//自动变化大小写
-		}
-		
-		if ($controller) {
-			$class = $controller . "Controller";
+		//$controller = null;
+		//if (!empty($request->params['controller'])) {
+		//	$controller = $request->params['controller'];//自动变化大小写
+		//}
+		//
+		//if ($controller) {
+		//	$class = $controller . "Controller";
 
-			$class = "Suara\\Apps\\Controllers\\$class";
+		//	$class = "Suara\\Apps\\Controllers\\$class";
 
-			if (class_exists($class)) {
-				return $class;
-			}
-		}
+		//	if (class_exists($class)) {
+		//		return $class;
+		//	}
+		//}
 
-		return false;
+		//return false;
 	}
 }
 
