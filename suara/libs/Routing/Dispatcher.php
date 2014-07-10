@@ -32,24 +32,24 @@ class Dispatcher {
 	 * boot dispatching
 	 */
 	public function dispatch(Request $request, Response $response) {
-		$this->parseParams($request);
+		//$this->parseParams($request);
 
-		/* @var Controller $controller */
-		$controller = $this->_getController($request, $response);
+		///* @var Controller $controller */
+		//$controller = $this->_getController($request, $response);
 
-		if (!($controller instanceof Controller)) {
-			throw new MissingControllerException("{$controller} is not exists");
-			exit;
-		}
+		//if (!($controller instanceof Controller)) {
+		//	throw new MissingControllerException("{$controller} is not exists");
+		//	exit;
+		//}
 
-		$response = $this->_invoke($controller, $request, $response);
-		
-		if (isset($request->params['return'])) {
-			return $response->body();
-		}
+		//$response = $this->_invoke($controller, $request, $response);
+		//
+		//if (isset($request->params['return'])) {
+		//	return $response->body();
+		//}
 
-		//输出
-		$response->send();
+		////输出
+		//$response->send();
 	}
 
 	public function _invoke(Controller $controller, Request $request, Response $response) {

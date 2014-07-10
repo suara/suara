@@ -41,7 +41,6 @@ class Request {
 	public $headers = false;
 
 	public function __construct($uri = null, $parseEnvironment = true) {
-		$this->_base();
 		if (!$uri) {
 			$uri = $this->_uri();
 		}
@@ -55,14 +54,9 @@ class Request {
 			$this->processPOST();
 			$this->processFILE();
 		}
-
 		$this->here = $this->base . "/" . $this->uri;
 	}
 	
-	//主要针对prefix来处理的
-	private function _base() {
-	}
-
 	/**
 	 * Absolute url path
 	 */
@@ -202,7 +196,7 @@ class Request {
 				$_POST = Suara\new_addslashes($_POST);
 			}
 			$this->data = $_POST;
-		} elseif (($this->isPut() || $this->isDelete()) && strpos(Suara\env("CONTENT_TYPE"), "application/x-www-form-urlencoded") === 0) {
+		} elseif (($this->isPut() || $this->isDelete()) && strpos($this->header("CONTENT_TYPE"), "application/x-www-form-urlencoded") === 0) {
 			$data = $this->_readInput();
 			parse_str($data, $this->data);
 		}
