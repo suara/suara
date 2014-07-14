@@ -5,9 +5,5 @@ use Suara\Libs\Routing\Dispatcher;
 use Suara\Libs\Web\Request;
 use Suara\Libs\Web\Response;
 
-//(new Dispatcher())->dispatch(new Request(), new Response());
-
-$request = new Request();
-
-print_r($request);
+(new Dispatcher())->dispatch(new Request(), new Response());
 ?>

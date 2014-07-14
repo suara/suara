@@ -85,8 +85,6 @@ class Router {
 			parse_str($queryParams, $queryParams);
 		}
 
-		//parse extension url
-
 		//parse url
 		for ($i = 0, $len = count(self::$routes); $i < $len; $i++) {
 			$route =& self::$routes[$i];
