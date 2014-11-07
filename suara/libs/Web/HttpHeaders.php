@@ -13,8 +13,9 @@
  * @description   HTTP Headers Collection.
  */
 namespace Suara\Libs\Web;
+use IteratorAggregate, ArrayAccess, Countable;
 
-class HttpHeaders implements \IteratorAggregate, \ArrayAccess, \Countable {
+class HttpHeaders implements IteratorAggregate, ArrayAccess, Countable {
 	private $_headers = [];
 
 	public function getIterator() {

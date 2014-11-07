@@ -13,16 +13,24 @@
 namespace Suara\Libs\Core;
 
 class Kernel {
+
+	/**
+	 * Save registered namespace and path
+	 * for vendors
+	 */
+	protected static $_namespaces = [];
+
+
 	/**
 	 * save all loaded classes
 	 */
 	protected static $_map = [];
 
-	private static $classTypes = [
-		"Libs" => SUARA_CORE_PATH, 
-		"Plugins" => SUARA_PLUGINS_PATH, 
-		"Apps" => SUARA_APPS_PATH
-	];
+//	private static $classTypes = [
+//		"Libs" => SUARA_CORE_PATH, 
+//		"Plugins" => SUARA_PLUGINS_PATH, 
+//		"Apps" => SUARA_APPS_PATH
+//	];
 
 	public static $booting = false;
 	
@@ -43,33 +51,33 @@ class Kernel {
 	 */
 	public static function load($className) {
 		//判断是否是属于Suara的内库
-		if ( strpos($className, "Suara") !== 0 ) {
-			return false;
-		}
+		//if ( strpos($className, "Suara") !== 0 ) {
+		//	return false;
+		//}
 
-		list(, $type, $parts)= explode("\\", $className, 3);
+		//list(, $type, $parts)= explode("\\", $className, 3);
 
-		$path = "";
-		if (!empty(self::$classTypes[$type])) {
-			$path = self::$classTypes[$type];
-		} else {
-			return false;
-		}
+		//$path = "";
+		//if (!empty(self::$classTypes[$type])) {
+		//	$path = self::$classTypes[$type];
+		//} else {
+		//	return false;
+		//}
 
-		$normalizedClassName = str_replace('\\', DIRECTORY_SEPARATOR, $parts);
-		$file = $path.$normalizedClassName.".php";
+		//$normalizedClassName = str_replace('\\', DIRECTORY_SEPARATOR, $parts);
+		//$file = $path.$normalizedClassName.".php";
 
-		$hashKey = md5($file);
-		if (!empty(self::$_map[$hashKey])) {
-			return true;
-		}
+		//$hashKey = md5($file);
+		//if (!empty(self::$_map[$hashKey])) {
+		//	return true;
+		//}
 
-		if (file_exists($file)) {
-			self::$_map[$hashKey] = $file;
-			return include $file;
-		}
+		//if (file_exists($file)) {
+		//	self::$_map[$hashKey] = $file;
+		//	return include $file;
+		//}
 
-		return false;
+		//return false;
 	}
 
 	/**
@@ -80,60 +88,60 @@ class Kernel {
 	 * @param string $name
 	 * @param string $file
 	 */
-	public static function import($type = null, $name = null, $file = null) {
-		if (!empty($name) && !empty($file)) {
-			return;
-		}
+	//public static function import($type = null, $name = null, $file = null) {
+	//	if (!empty($name) && !empty($file)) {
+	//		return;
+	//	}
 
-		$ltype = strtolower($type);
-		$returnValue = false;
+	//	$ltype = strtolower($type);
+	//	$returnValue = false;
 
-		$hashKey = md5($file);
-		if (!empty(self::$_map[$hashKey])) {
-			return true;
-		}
+	//	$hashKey = md5($file);
+	//	if (!empty(self::$_map[$hashKey])) {
+	//		return true;
+	//	}
 
-		if ($ltype == 'file') {
-			$returnValue = self::_loadFile($file);
-		}
+	//	if ($ltype == 'file') {
+	//		$returnValue = self::_loadFile($file);
+	//	}
 
-		if ($returnValue) {
-			self::$_map[$hashKey] = $file;
-		}
+	//	if ($returnValue) {
+	//		self::$_map[$hashKey] = $file;
+	//	}
 
-		return $returnValue;
-	}
-
-	/**
-	 * _load special file
-	 */
-	protected static function _loadFile($path) {
-		if (!file_exists($path)) {
-			return false;
-		}
-
-		if (!is_readable($path)) {
-			return false;
-		}
-
-		return include $path;
-	}
-
-	//protected static function _loadClass() {
+	//	return $returnValue;
 	//}
 
-	//protected static function _loadVendor() {
-	//}
-
-	public static function init() {
-		register_shutdown_function(['Suara\Libs\Core\Kernel', 'shutdown']);
-	}
-
-	public static function shutdown() {
-		self::_checkFatalError();
-	}
-
-	protected static function _checkFatalError() {
-	}
+//	/**
+//	 * _load special file
+//	 */
+//	protected static function _loadFile($path) {
+//		if (!file_exists($path)) {
+//			return false;
+//		}
+//
+//		if (!is_readable($path)) {
+//			return false;
+//		}
+//
+//		return include $path;
+//	}
+//
+//	//protected static function _loadClass() {
+//	//}
+//
+//	//protected static function _loadVendor() {
+//	//}
+//
+//	public static function init() {
+//		register_shutdown_function(['Suara\Libs\Core\Kernel', 'shutdown']);
+//	}
+//
+//	public static function shutdown() {
+//		self::_checkFatalError();
+//	}
+//
+//	protected static function _checkFatalError() {
+//	}
 }
 ?>
